@@ -1,0 +1,37 @@
+<script>    
+    import { navigate } from 'svelte-routing';
+    import { Login, CheckIfLoggedIn } from '../js/utilities/home.js';
+
+    import blob from '../../assets/2022_sm_002.png';
+
+    let loggedIn = false;
+
+    function NavToRegister(event)
+    {
+        event.preventDefault();
+        navigate('/register');
+    }
+</script>
+
+<svelte:head>
+    <title>Posts Manager - Login</title>
+</svelte:head>
+
+<div id="form-login-container" class="flex flex-col justify-center items-center h-screen w-screen">
+    <form id="form-login" class="flex flex-col justify-center items-center border-solid rounded-lg border border-black md:w-1/4 md:h-1/2 overflow-auto">
+        <input id="user" type="text" placeholder="User" autocomplete="off" class="m-2">
+        <input id="password" type="password" placeholder="Password" autocomplete="off" class="m-2">
+        <a href='/register' on:click={NavToRegister} role="button" aria-label="Navigate to another component" class="m-2">
+            Register an account
+        </a>
+        <button id="login-btn" on:click={Login} class="m-2">
+            Login
+        </button>
+        <span id="response">
+            <span id="slime_spinner" class="flex flex-col items-center mt-3 mb-3" style="visibility: hidden;">
+                <img id="slime" class="pulse" src={blob} alt="a black blob with eyes" title="Tinyblob welcomes you! " style="width: 52px; height: 45px;">
+            </span>
+        </span>
+        <p id="message" class="h-1 italic"></p>
+    </form>
+</div>
