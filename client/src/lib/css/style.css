@@ -101,6 +101,13 @@
 /*
     LOTL ZONE
 */
+#dialog-title
+{
+  color: rgb(201, 201, 201);
+  font-style: italic;
+  font-size: 24px;
+}
+
 .hidden
 {
   display: none;
@@ -112,8 +119,8 @@
   flex-direction: column;
   align-items: center;
   border: solid 1px;
-  width: 60vw;
-  height: 70vh;
+  /* width: 60vw;
+  height: 70vh; */
   position: fixed;
   top: 20%;
   z-index: 999;

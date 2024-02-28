@@ -72,6 +72,8 @@ $app->get('[/]', \Model\Services\Manager::class . '::ReturnToFront')->add(\Model
 
  $app->get('/home', \Model\Services\Manager::class . '::ReturnToFront')->add(\Model\Middlewares\Wards::class . '::Auth');
 
+ $app->get('/edit_post', \Model\Services\Manager::class . '::ReturnToFront')->add(\Model\Middlewares\Wards::class . '::Auth');
+
 #endregion
 
 /////////////////////////////////////////////////////////////
@@ -102,6 +104,6 @@ $app->get('/posts/post', \Model\Services\PostManager::class . '::ReturnPost');
 // *************** ROUTE CATCHER ***************
 // Serve the front-end HTML for any route that doesn't match defined routes.
 $app->get('/{routes:.+}', \Model\Services\Manager::class . '::ReturnToFront');
-$app->post('/{routes:.+}', \Model\Services\Manager::class . '::ReturnToFront');
+//$app->post('/{routes:.+}', \Model\Services\Manager::class . '::ReturnToFront');
 
 $app->run();

@@ -8,7 +8,7 @@
     let name = sm.ReadLS('user');
 </script>
 
-<header class="px-2 md:px-0">
+<header class="px-2 md:px-0 fixed w-screen" style="z-index: 777;">
     <div class="container mx-auto py-2 flex justify-between items-center">
         <a class="logo_holder" href="https://tinydark.com/">
             <span id="slimeholder" class="bouncy">
@@ -22,33 +22,8 @@
                 Log out
             </button>
         </nav>
-
-        <!-- <input id="menu-toggle" type="checkbox">
-        <label class="menu-button-container" for="menu-toggle">
-        <div class="menu-button"></div>
-        <nav>
-            <ul class="menu" style="display: none;">
-                {#if checked}
-                    {#if !$isLoggedIn}
-                        
-                        <li>
-                            <button type="button" on:click={showModal}>
-                                Sign in
-                            </button>
-                        </li>
-                    {:else}
-                        
-                        <li>
-                            <p class="m-0">Welcome, {name}.</p>
-                        </li>
-                        <li>
-                            <button style="margin-left: 20px;" type="button" on:click={handleLogout}>
-                                Log out
-                            </button>
-                        </li>
-                    {/if}      
-                {/if}              
-            </ul>
-        </nav> -->
     </div>
+    <slot>
+        
+    </slot>
 </header>

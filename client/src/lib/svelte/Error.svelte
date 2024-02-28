@@ -1,7 +1,3 @@
-<img src={sadFrog} class="logo frog" alt="dancing frog" />
-<p>That place doesn't exist.</p>
-<button id="back-btn" on:click={GoBack}>« Go back</button>
-
 <script>
     import { navigate } from 'svelte-routing';    
     import { onMount } from 'svelte';
@@ -13,3 +9,7 @@
         navigate('/error', { replace: true }); // Replace the current entry in the history stack
     });
 </script>
+
+<img src={sadFrog} class="logo frog" alt="dancing frog" />
+<p>That place doesn't exist.</p>
+<button id="back-btn" on:click={GoBack}>« Go back</button>

@@ -1,8 +1,10 @@
 import { navigate } from 'svelte-routing';
+import { get } from 'svelte/store';
 import { DataAccessFetch } from "../services/DataAccessFetch.js";
 import { StorageManager } from '../services/StorageManager.js';
 import { DynamicDrawer } from '../services/DynamicDrawer.js';
 import { DateFormatter } from '../services/DateFormatter.js';
+import { postAttributes } from '../stores/stores.js';
 
 let dataAccess = new DataAccessFetch();
 let storageManager = new StorageManager();
@@ -67,27 +69,27 @@ export async function Logout()
     }
 }
 
-export async function CheckIfLoggedIn()
-{
-    let serverResponse = await dataAccess.postData('http://localhost:8000/check_logged_in', '');
-    if(serverResponse)
-    {
-        let resp = await serverResponse.json();
-        if(serverResponse.ok)
-        {            
-            return { success: true, username: resp['response'] };
-        }
-        else
-        {
-            return { success: false };
-        }        
-    }
-    else
-    {
-        console.log(serverResponse);
-        return false;
-    }
-}
+// export async function CheckIfLoggedIn()
+// {
+//     let serverResponse = await dataAccess.postData('http://localhost:8000/check_logged_in', '');
+//     if(serverResponse)
+//     {
+//         let resp = await serverResponse.json();
+//         if(serverResponse.ok)
+//         {            
+//             return { success: true, username: resp['response'] };
+//         }
+//         else
+//         {
+//             return { success: false };
+//         }        
+//     }
+//     else
+//     {
+//         console.log(serverResponse);
+//         return false;
+//     }
+// }
 
 export async function GeneratePageButtons()
 {
@@ -173,17 +175,7 @@ export async function GeneratePosts()
         // contentDiv2.innerHTML = posts[i].content;
         // contentDiv1.appendChild(contentDiv2);
 
-        previewBtn.addEventListener('click', async ()=>
-        {
-            let post = await GetPostContent(postContainer);
-            let dialogContent = document.getElementById('dialogContent');
-            if(post)
-            {                
-                dialogContent.innerHTML = post.content;
-                dialog.open = true;
-                document.getElementById('dialog').style.display = 'flex';
-            }
-        });
+        AddPreviewBtnMechanic(previewBtn, postContainer);
 
         if(i < posts.length )
         {
@@ -205,13 +197,39 @@ async function GetPostContent(postContainer)
     }
 }
 
+function AddPreviewBtnMechanic(btn, postContainer)
+{
+    btn.addEventListener('click', async ()=>
+    {
+        let post = await GetPostContent(postContainer);
+        let dialogContent = document.getElementById('dialogContent');
+        let dialogTitle = document.getElementById('dialog-title');
+        if(post)
+        {
+            dialogTitle.textContent = `"${post.headline} - ${post.date}"`;
+            dialogContent.setAttribute('post-attributes', JSON.stringify({game: post.game, headline: post.headline }));            
+            dialogContent.innerHTML = post.content;
+            dialog.open = true;
+            document.getElementById('dialog').style.display = 'flex';
+        }
+    });
+}
+
+export function EditPost()
+{
+    let dialogContent = document.getElementById('dialogContent');
+    let postAtt = JSON.parse(dialogContent.getAttribute('post-attributes'));    
+    
+    postAttributes.set(postAtt);
+    navigate('/edit_post');
+}
+
 export function CloseDialog()
 {
     let dialog = document.getElementById('dialog');
     dialog.style.display = '';
     dialog.close();
 }
-
 
 // ------------------------------------
 

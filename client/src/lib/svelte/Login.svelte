@@ -1,6 +1,6 @@
 <script>    
     import { navigate } from 'svelte-routing';
-    import { Login, CheckIfLoggedIn } from '../js/utilities/home.js';
+    import { Login } from '../js/utilities/home.js';
 
     import blob from '../../assets/2022_sm_002.png';
 
