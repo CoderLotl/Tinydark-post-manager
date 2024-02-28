@@ -7,6 +7,11 @@
     let postAtt; $:{ postAtt = $postAttributes; }
 
     console.log(get(postAttributes));
+
+
+
+
+
 </script>
 
 <svelte:head>
@@ -19,6 +24,3 @@
     </button>
 </Home_header>
 
-<div>
-    
-</div>
