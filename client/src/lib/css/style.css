@@ -113,6 +113,17 @@
   display: none;
 }
 
+#editor
+{
+  background-color: #215077a2;
+  color: rgb(201, 201, 201);
+}
+
+#editor-container
+{
+  background-color: #25679c;
+}
+
 .post-dialog
 {
   background-color: #215077a2;

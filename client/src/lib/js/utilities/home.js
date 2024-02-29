@@ -4,7 +4,6 @@ import { DataAccessFetch } from "../services/DataAccessFetch.js";
 import { StorageManager } from '../services/StorageManager.js';
 import { DynamicDrawer } from '../services/DynamicDrawer.js';
 import { DateFormatter } from '../services/DateFormatter.js';
-import { postAttributes } from '../stores/stores.js';
 
 let dataAccess = new DataAccessFetch();
 let storageManager = new StorageManager();
@@ -217,10 +216,8 @@ function AddPreviewBtnMechanic(btn, postContainer)
 
 export function EditPost()
 {
-    let dialogContent = document.getElementById('dialogContent');
-    let postAtt = JSON.parse(dialogContent.getAttribute('post-attributes'));    
-    
-    postAttributes.set(postAtt);
+    let dialogContent = document.getElementById('dialogContent');    
+    storageManager.WriteSS('post-content',dialogContent.innerHTML);
     navigate('/edit_post');
 }
 

@@ -45,7 +45,7 @@ class Manager
 
             // We create the token
             $jwt = AuthJWT::NewToken($params['user']);
-            $expireTime = time() + 3600;                   
+            $expireTime = time() + 36000;                   
 
             $payload = json_encode(['token' => $jwt]);
 
