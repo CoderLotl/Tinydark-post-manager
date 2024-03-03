@@ -99,6 +99,8 @@ $app->get('/posts/posts_content', \Model\Services\PostManager::class . '::Return
 
 $app->get('/posts/post', \Model\Services\PostManager::class . '::ReturnPost');
 
+$app->put('/posts/save_post_changes', \Model\Services\PostManager::class . '::SavePostChanges');
+
 #endregion
 
 // *************** ROUTE CATCHER ***************

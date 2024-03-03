@@ -23,35 +23,35 @@ export async function Login(event) {
     message.textContent = '';
     
     let serverResponse = await dataAccess.postData('http://localhost:8000/login', payload);
-        if (serverResponse)
-        {            
-            let resp = await serverResponse.json();
+    if (serverResponse)
+    {            
+        let resp = await serverResponse.json();
+        
+        if(serverResponse.ok)
+        {                
+            let svResponse = JSON.parse(resp['response']);
             
-            if(serverResponse.ok)
-            {                
-                let svResponse = JSON.parse(resp['response']);
-                
-                if (svResponse.hasOwnProperty('token'))
-                {                                    
-                    blob.style.visibility = 'visible';
-                    storageManager.WriteLS('user', user.value);
-                    setTimeout(() => {
-                        blob.style.visibility = 'hidden';
-                        navigate('/home');
-                    }, 2000);                
-                }
-            }
-            else
-            {
-                message.textContent = 'Error: ' + resp['response'];
+            if (svResponse.hasOwnProperty('token'))
+            {                                    
+                blob.style.visibility = 'visible';
+                storageManager.WriteLS('user', user.value);
+                setTimeout(() => {
+                    blob.style.visibility = 'hidden';
+                    navigate('/home');
+                }, 2000);                
             }
         }
         else
         {
-            let message = 'Error contacting the server. Check your connection.';
-            console.log(serverResponse);
-            message.textContent = message;
+            message.textContent = 'Error: ' + resp['response'];
         }
+    }
+    else
+    {
+        let message = 'Error contacting the server. Check your connection.';
+        console.log(serverResponse);
+        message.textContent = message;
+    }
 }
 
 export async function Logout()
@@ -130,14 +130,14 @@ export async function GetPosts(page, amount)
     let serverResponse = await dataAccess.getData('http://localhost:8000/posts/posts_content', payload);
     if(serverResponse)
     {
-        let resp = await serverResponse.json();
+        let resp = await serverResponse.json();        
         return resp['response'];
     }
 }
 
 export async function GeneratePosts()
 {
-    posts = await GetPosts(1, 5);
+    let posts = await GetPosts(1, 5);
     let container = document.getElementById('posts');
     let navBottom = container.children[0];
 
@@ -204,9 +204,9 @@ function AddPreviewBtnMechanic(btn, postContainer)
         let dialogContent = document.getElementById('dialogContent');
         let dialogTitle = document.getElementById('dialog-title');
         if(post)
-        {
+        {            
             dialogTitle.textContent = `"${post.headline} - ${post.date}"`;
-            dialogContent.setAttribute('post-attributes', JSON.stringify({game: post.game, headline: post.headline }));            
+            dialogContent.setAttribute('post-attributes', JSON.stringify({game: post.game, headline: post.headline, object_id: post.object_id }));
             dialogContent.innerHTML = post.content;
             dialog.open = true;
             document.getElementById('dialog').style.display = 'flex';
@@ -216,8 +216,10 @@ function AddPreviewBtnMechanic(btn, postContainer)
 
 export function EditPost()
 {
-    let dialogContent = document.getElementById('dialogContent');    
-    storageManager.WriteSS('post-content',dialogContent.innerHTML);
+    let dialogContent = document.getElementById('dialogContent');
+    let postAttributes = JSON.parse(dialogContent.getAttribute('post-attributes'));
+    postAttributes.content = dialogContent.innerHTML;
+    storageManager.WriteSS('post',JSON.stringify(postAttributes));
     navigate('/edit_post');
 }
 

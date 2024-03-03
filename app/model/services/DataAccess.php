@@ -234,26 +234,21 @@ class DataAccess
         try
         {
             $setClause = '';
-            $lastColumn = end($columns);
+            $params = [];
             foreach($columns as $key => $col)
             {
-                if($values[$key] == null)
-                {
-                    $setClause .= "`{$col}` = NULL";
-                }
-                else
-                {
-                    $setClause .= "`{$col}` = '{$values[$key]}'";
-                }
-                if($col != $lastColumn)
+                $setClause .= "`{$col}` = ?";
+                $params[] = $values[$key];
+                if($key < count($columns) - 1)
                 {
                     $setClause .= ', ';
                 }
             }
-            $query = "UPDATE `{$table}` SET {$setClause} WHERE `{$whereColumn}` = '{$whereValue}'";            
+            $query = "UPDATE `{$table}` SET {$setClause} WHERE `{$whereColumn}` = ?";
+            $params[] = $whereValue;
+    
             $statement = self::$pdo->prepare($query);
-
-            return $statement->execute();
+            return $statement->execute($params);            
         }
         catch(Exception $e)
         {

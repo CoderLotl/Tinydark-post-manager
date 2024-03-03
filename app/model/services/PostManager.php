@@ -25,9 +25,28 @@ class PostManager
     public static function ReturnPost($request, $response)
     {
         $params = self::GetRequest($request);
-        $post_content = DataAccess::SelectWhere(POSTS, ['game', 'headline'], [$params['game'], $params['headline']]);
-        //$posts = DataAccess::ReturnByGroups(POSTS, $params['page'], $params['posts_amount'], 'date');
+        $post_content = DataAccess::SelectWhere(POSTS, ['game', 'headline'], [$params['game'], $params['headline']]);        
         return self::ReturnResponse($request, $response, $post_content, 200);
+    }
+
+    public static function SavePostChanges($request, $response)
+    {
+        $params = self::GetRequest($request);
+        $update = DataAccess::Update(
+            POSTS,
+            ['game', 'headline', 'content'],
+            [$params['game'], $params['headline'], $params['content'] ],
+            'object_id',
+            $params['object_id']
+        );
+        if($update)
+        {
+            return self::ReturnResponse($request, $response, 'OK', 200);
+        }
+        else
+        {
+            return self::ReturnResponse($request, $response, 'ERROR UPDATING', 400);
+        }
     }
 
     private static function GetRequest($request)

@@ -45,7 +45,7 @@
             <img id="slime" src={blob} alt="Close button" title="Close" style="width: 52px; height: 45px;">
         </button>
         <button id="btnCompose" class="bouncy mt-6" on:click={EditPost}>
-            <img id="compose" src={compose} alt="Compose post" title="Compose" style="width: 52px;">
+            <img id="compose" src={compose} alt="Edit post" title="Edit" style="width: 52px;">
         </button>
     </div>
 </dialog>
