@@ -18,7 +18,7 @@
         </a>
         <nav class="flex items-center">
             <p class="m-0">Welcome {name}.</p>
-            <button style="margin-left: 20px;" type="button" on:click={Logout}>
+            <button style="margin-left: 20px;" on:click={Logout}>
                 Log out
             </button>
         </nav>

@@ -2,7 +2,7 @@
 // @ts-nocheck
 
   // IMPORTS
-  import { Router, Route } from 'svelte-routing';    
+  import { Router, Route } from 'svelte-routing';  
 
   // COMPONENTS
   import Login from './lib/svelte/Login.svelte';

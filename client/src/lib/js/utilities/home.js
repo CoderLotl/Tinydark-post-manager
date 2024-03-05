@@ -206,7 +206,7 @@ function AddPreviewBtnMechanic(btn, postContainer)
         if(post)
         {            
             dialogTitle.textContent = `"${post.headline} - ${post.date}"`;
-            dialogContent.setAttribute('post-attributes', JSON.stringify({game: post.game, headline: post.headline, object_id: post.object_id }));
+            dialogContent.setAttribute('post-attributes', JSON.stringify({game: post.game, headline: post.headline, object_id: post.object_id, url: post.url }));
             dialogContent.innerHTML = post.content;
             dialog.open = true;
             document.getElementById('dialog').style.display = 'flex';

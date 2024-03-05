@@ -8,12 +8,11 @@
     
     let storageManager = new StorageManager();
     let postContent = JSON.parse(storageManager.ReadSS('post'));
-    //const Delta = Quill.import('delta');
-    //const Parchment = Quill.import('parchment');
 
     let quill;
     let quill2;
     let quill3;
+    let quill4;
 
     onMount( ()=>
     {        
@@ -26,10 +25,12 @@
         });
         quill2 = new Quill('#title-editor');
         quill3 = new Quill('#game-editor');
+        quill4 = new Quill('#url-editor');
 
         quill.root.innerHTML = postContent.content;
         quill2.root.innerHTML = postContent.headline;
         quill3.root.innerHTML = postContent.game;
+        quill4.root.innerHTML = postContent.url;
     });
 
     function handleSavingPostChanges()
@@ -52,54 +53,66 @@
 
 <Home_header>
     <div class="flex flex-col items-center">
-        <button type="button" on:click={GoBack}>
+        <button on:click={GoBack}>
             Go Back
         </button>
     </div>
 </Home_header>
 
-<div id="editor-container" class="mt-40 relative flex flex-col items-center rounded-3xl">
-    <fieldset id="details-fieldset" class="flex w-3/4 justify-between px-3 border border-solid rounded-3xl mt-6">
+<div class="editor-container mt-40 relative flex flex-col items-center rounded-3xl">
+    <fieldset id="details-fieldset" class="flex flex-col w-3/4 px-3 border border-solid rounded-3xl mt-6 bg-slate-800">
         <legend class="text-base">
             Post Details
-        </legend>            
-        <div class="w-3/5">
-            <label for="title-editor">
-                Title
-            </label>
-            <div id="title-editor" class="editor w-full">
-
+        </legend>
+        <div id="first-row-details" class="flex justify-between">
+            <div class="w-3/5">
+                <label for="title-editor" class="text-lg">
+                    Title
+                </label>
+                <div id="title-editor" class="editor w-full rounded-3xl px-6 italic">
+    
+                </div>
+            </div>
+            <div class="w-1/5">
+                <label for="game-editor" class="text-lg">
+                    Tag
+                </label>
+                <div id="game-editor" class="editor w-full rounded-3xl pl-3 pr-0 md:pl-3 italic">
+    
+                </div>
             </div>
         </div>
-        <div class="w-1/5">
-            <label for="game-editor">
-                Tag
-            </label>
-            <div id="game-editor" class="editor w-full">
-
+        <div id="second-row-details">
+            <div class="w-3/5">
+                <label for="url-editor" class="text-lg">
+                    URL
+                </label>
+                <div id="url-editor" class="editor w-full rounded-3xl px-6 italic">
+    
+                </div>
             </div>
         </div>
     </fieldset>    
-    <fieldset id="post-content-fieldset" class="flex flex-col items-center w-3/4 border border-solid rounded-3xl mt-6 pl-3 pr-3">
+    <fieldset id="post-content-fieldset" class="flex flex-col items-center w-3/4 border border-solid rounded-3xl mt-6 pl-3 pr-3 bg-slate-800">
         <legend class="text-base">
             Post content
         </legend>
         <fieldset id="toolbar" class="flex justify-center w-full border border-solid my-6">
             <div id="toolbar" class="my-2">
-                <button class="ql-bold">B</button>
-                <button class="ql-italic">I</button>
-                <button class="ql-underline">U</button>
-                <button class="ql-link">Link</button>
+                <button class="ql-bold td-button">B</button>
+                <button class="ql-italic td-button">I</button>
+                <button class="ql-underline td-button">U</button>
+                <button class="ql-link td-button">Link</button>
             </div>
         </fieldset>
         <div id='post-editor' class="h-min-full w-full rounded-3xl p-6 my-6 editor">
         
         </div>
         <div class="mb-6">
-            <button type="button" on:click={GoBack}>
+            <button on:click={GoBack}>
                 Go Back
             </button>
-            <button type="button" on:click={handleSavingPostChanges}>
+            <button on:click={handleSavingPostChanges}>
                 Save Changes
             </button>
         </div>
