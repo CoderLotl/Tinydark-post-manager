@@ -46,7 +46,7 @@ $app->addBodyParsingMiddleware();
 $app->get('/test', function (Request $request, Response $response)
 {
     Log::WriteLog('test.txt', 'a');
-    $payload = json_encode(array('method' => 'GET', 'msg' => "GET /test funcionando (archivo .htacces presente)."));
+    $payload = json_encode(array('method' => 'GET', 'msg' => "GET /test working (.htacces file is present)."));
     $response->getBody()->write($payload);
     return $response->withHeader('Content-Type', 'application/json');    
 });
@@ -99,7 +99,7 @@ $app->get('/posts/posts_content', \Model\Services\PostManager::class . '::Return
 
 $app->get('/posts/post', \Model\Services\PostManager::class . '::ReturnPost');
 
-$app->put('/posts/save_post_changes', \Model\Services\PostManager::class . '::SavePostChanges');
+$app->put('/posts/save_post_changes', \Model\Services\PostManager::class . '::SavePostChanges')->add(\Model\Middlewares\Wards::class . '::IsAllowed');
 
 #endregion
 

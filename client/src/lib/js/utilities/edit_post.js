@@ -8,7 +8,10 @@ export async function SavePostChanges(postContent)
     let serverResponse = await dataAccess.putData('http://localhost:8000/posts/save_post_changes', payload);
     if(serverResponse)
     {
-
+        if(serverResponse.ok)
+        {
+            console.log(':D');
+        }
     }
     else
     {

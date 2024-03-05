@@ -23,11 +23,12 @@ class AuthJWT
         return JWT::encode($payload, self::$secretWord);
     }
     
-    public static function VerifyToken($token)
+    public static function VerifyToken($token, $request, $handler)
     {
         if(empty($token))
         {
-            return 'Empty token';
+            $response = $handler->handle($request);
+            return $response->withStatus(498);
         }
         try
         {
@@ -42,7 +43,8 @@ class AuthJWT
             }
             else
             {
-                return false;
+                $response = $handler->handle($request);
+                return $response->withStatus(498);
             }
         }
         catch(Exception $e)
@@ -51,7 +53,8 @@ class AuthJWT
         }
         catch(\Firebase\JWT\ExpiredException $e)
         {
-            return 'expired';
+            $response = $handler->handle($request);
+            return $response->withStatus(498);
         }
     }
 
@@ -63,36 +66,4 @@ class AuthJWT
             self::$encrypt
         )->data;
     }
-    
-    /*
-    public static function GetPayload($token)
-    {
-        if (empty($token)) {
-            throw new Exception("El token esta vacio.");
-        }
-        return JWT::decode(
-            $token,
-            self::$secretWord,
-            self::$encrypt
-        );
-    }
-
-
-    private static function Aud()
-    {
-        $aud = '';
-
-        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
-            $aud = $_SERVER['HTTP_CLIENT_IP'];
-        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            $aud = $_SERVER['HTTP_X_FORWARDED_FOR'];
-        } else {
-            $aud = $_SERVER['REMOTE_ADDR'];
-        }
-
-        $aud .= @$_SERVER['HTTP_USER_AGENT'];
-        $aud .= gethostname();
-
-        return sha1($aud);
-    }*/
 }

@@ -17,7 +17,7 @@ class Wards
         if(isset($cookies['token']))
         {
             $token = $cookies['token'];
-            if(AuthJWT::VerifyToken($token))
+            if(AuthJWT::VerifyToken($token, $request, $handler))
             {
                 $response = $handler->handle($request);
                 return $response->withHeader('Location', '/home')->withStatus(302);
@@ -41,7 +41,7 @@ class Wards
         if(isset($cookies['token']))
         {
             $token = $cookies['token'];
-            if(AuthJWT::VerifyToken($token))
+            if(AuthJWT::VerifyToken($token, $request, $handler) == true)
             {
                 return $handler->handle($request);
             }
@@ -53,10 +53,21 @@ class Wards
         }
     }
 
-    public static function VerifyCode($request, $handler) // UNUSED
+    public static function IsAllowed($request, $handler)
     {
-        $routeContext = RouteContext::fromRequest($request); // I get the Route Context
-        $route = $routeContext->getRoute(); // I geth the Route
-        $code = $route->getArgument('code') ?? null; // I get a specific Arg        
+        $cookies = $request->getCookieParams();
+        if(isset($cookies['token']))
+        {
+            $token = $cookies['token'];
+            if(AuthJWT::VerifyToken($token, $request, $handler) == true)
+            {
+                return $handler->handle($request);
+            }
+        }
+        else
+        {
+            $response = $handler->handle($request);
+            return $response->withStatus(401);
+        }
     }
 }
