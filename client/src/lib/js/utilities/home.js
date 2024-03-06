@@ -170,10 +170,6 @@ export async function GeneratePosts()
         previewBtn.className = 'max-w-min';
         contentDiv1.appendChild(previewBtn);
 
-        // let contentDiv2 = dynamicDrawer.CreateDiv(null, 'relative flex-grow max-w-full flex-1 px-4 pl-0 blogpost');
-        // contentDiv2.innerHTML = posts[i].content;
-        // contentDiv1.appendChild(contentDiv2);
-
         AddPreviewBtnMechanic(previewBtn, postContainer);
 
         if(i < posts.length )
