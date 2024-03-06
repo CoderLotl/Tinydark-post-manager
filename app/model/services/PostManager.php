@@ -15,6 +15,12 @@ class PostManager
         return self::ReturnResponse($request, $response, ceil($count / $postsPerPage), 200);
     }
 
+    public static function GetTags($request, $response)
+    {        
+        $tags = DataAccess::SelectDistinctColumn(POSTS, 'game');
+        return self::ReturnResponse($request, $response, $tags, 200);
+    }
+
     public static function ReturnPosts($request, $response)
     {
         $params = self::GetRequest($request);

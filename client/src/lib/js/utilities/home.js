@@ -22,6 +22,7 @@ export async function Login(event) {
     let payload = { user: user.value, password: password.value };
     message.textContent = '';
     
+    blob.style.visibility = 'visible';
     let serverResponse = await dataAccess.postData('http://localhost:8000/login', payload);
     if (serverResponse)
     {            
@@ -32,22 +33,23 @@ export async function Login(event) {
             let svResponse = JSON.parse(resp['response']);
             
             if (svResponse.hasOwnProperty('token'))
-            {                                    
-                blob.style.visibility = 'visible';
+            {                
                 storageManager.WriteLS('user', user.value);
                 setTimeout(() => {
                     blob.style.visibility = 'hidden';
                     navigate('/home');
-                }, 2000);                
+                }, 1000);                
             }
         }
         else
         {
+            blob.style.visibility = 'hidden';
             message.textContent = 'Error: ' + resp['response'];
         }
     }
     else
     {
+        blob.style.visibility = 'hidden';
         let message = 'Error contacting the server. Check your connection.';
         console.log(serverResponse);
         message.textContent = message;
@@ -68,39 +70,18 @@ export async function Logout()
     }
 }
 
-// export async function CheckIfLoggedIn()
-// {
-//     let serverResponse = await dataAccess.postData('http://localhost:8000/check_logged_in', '');
-//     if(serverResponse)
-//     {
-//         let resp = await serverResponse.json();
-//         if(serverResponse.ok)
-//         {            
-//             return { success: true, username: resp['response'] };
-//         }
-//         else
-//         {
-//             return { success: false };
-//         }        
-//     }
-//     else
-//     {
-//         console.log(serverResponse);
-//         return false;
-//     }
-// }
-
-export async function GeneratePageButtons()
+export async function GeneratePageButtons(page = 1, postsPerPage = 5)
 {
     let pageButtons = document.getElementById('page_buttons');
-    let payload = { posts_per_page: 5 };
+    let payload = { posts_per_page: postsPerPage };
     let serverResponse = await dataAccess.getData('http://localhost:8000/posts/pages_count', payload);
     
     if(serverResponse)
     {
         let resp = await serverResponse.json();
         let pages = JSON.parse(resp['response']);
-
+        pageButtons.innerHTML = '';
+        
         for(let i = 0; i < pages; i++)
         {
             let btn = document.createElement('button');
@@ -108,7 +89,7 @@ export async function GeneratePageButtons()
             btn.value = i + 1;
             btn.textContent = i + 1;
 
-            if(btn.value == 1)
+            if(btn.value == page)
             {
                 btn.disabled = 'disabled';
             }
@@ -124,6 +105,48 @@ export async function GeneratePageButtons()
     }
 }
 
+export async function GetTags()
+{
+    let tagsSelect = document.getElementById('tags');
+    let defaultOption = document.createElement('option');
+    defaultOption.textContent = 'All';
+    defaultOption.value = 'All';
+    tagsSelect.appendChild(defaultOption);
+
+    let serverResponse = await dataAccess.getData('http://localhost:8000/posts/get_tags');
+    if(serverResponse)
+    {
+        let resp = await serverResponse.json();
+        let options = resp['response'];
+        for(let i = 0; i < options.length; i++)
+        {
+            let opt = document.createElement('option');
+            opt.textContent = options[i];
+            opt.value = options[i];
+            tagsSelect.appendChild(opt);
+        }
+    }
+}
+
+export async function SetPostsPerPage(postsPerPage)
+{
+    let select = document.getElementById('posts-amount');
+    let selectedIndex;
+    switch(postsPerPage)
+    {
+        case '5':
+            selectedIndex = 0;
+            break;
+        case '10':
+            selectedIndex = 1;
+            break;
+        case '15':
+            selectedIndex = 2;
+            break;
+    }
+    select.selectedIndex = selectedIndex;
+}
+
 export async function GetPosts(page, amount)
 {
     let payload = {page: page, posts_amount: amount}
@@ -135,48 +158,52 @@ export async function GetPosts(page, amount)
     }
 }
 
-export async function GeneratePosts()
+export async function GeneratePosts(page = 1, postsPerPage = 5)
 {
-    let posts = await GetPosts(1, 5);
     let container = document.getElementById('posts');
-    let navBottom = container.children[0];
-
-    for(let i = 0; i < posts.length; i++)
+    let posts = await GetPosts(page, postsPerPage);
+    if(posts)
     {
-        let postContainer = dynamicDrawer.CreateDiv(null, 'container py-2 px-0 sm:px-1 blog');
-        postContainer.setAttribute('data-tag', CapitalizeFirstLetter(posts[i].game));        
-        postContainer.setAttribute('post-attributes', JSON.stringify({game: posts[i].game, headline: posts[i].headline }));
-        container.insertBefore(postContainer, navBottom);
-
-        let div1 = dynamicDrawer.CreateDiv(null, 'flex flex-wrap mb-2');
-        postContainer.appendChild(div1);
-
-        let div2 = dynamicDrawer.CreateDiv(null, 'blog_header w-full md:w-4/6 text-center sm:text-left');
-        div1.appendChild(div2);
-        
-        let h2 = dynamicDrawer.CreateH(2, posts[i].headline);
-        div2.appendChild(h2);
-
-        let div3 = dynamicDrawer.CreateDiv(null, 'w-full mt-2 text-center md:mt-0 md:w-2/6 md:text-right');
-        div3.textContent = dateFormatter.formatDate(posts[i].date);
-        div1.appendChild(div3);
-
-        let contentDiv1 = dynamicDrawer.CreateDiv(null, 'flex flex-col items-center');
-        contentDiv1.style = 'overflow: auto;';
-        postContainer.appendChild(contentDiv1);
-
-        let previewBtn = document.createElement('button');
-        previewBtn.textContent = 'Preview';
-        previewBtn.className = 'max-w-min';
-        contentDiv1.appendChild(previewBtn);
-
-        AddPreviewBtnMechanic(previewBtn, postContainer);
-
-        if(i < posts.length )
+        container.innerHTML = '';
+        let navBottom = container.children[0];
+    
+        for(let i = 0; i < posts.length; i++)
         {
-            let hr = dynamicDrawer.CreateHR(null, 'blogpost_hr my-2');
-            hr.setAttribute('data-tag', CapitalizeFirstLetter(posts[i].game));
-            container.insertBefore(hr, navBottom);
+            let postContainer = dynamicDrawer.CreateDiv(null, 'container py-2 px-0 sm:px-1 blog');
+            postContainer.setAttribute('data-tag', CapitalizeFirstLetter(posts[i].game));        
+            postContainer.setAttribute('post-attributes', JSON.stringify({game: posts[i].game, headline: posts[i].headline }));
+            container.insertBefore(postContainer, navBottom);
+    
+            let div1 = dynamicDrawer.CreateDiv(null, 'flex flex-wrap mb-2');
+            postContainer.appendChild(div1);
+    
+            let div2 = dynamicDrawer.CreateDiv(null, 'blog_header w-full md:w-4/6 text-center sm:text-left');
+            div1.appendChild(div2);
+            
+            let h2 = dynamicDrawer.CreateH(2, posts[i].headline);
+            div2.appendChild(h2);
+    
+            let div3 = dynamicDrawer.CreateDiv(null, 'w-full mt-2 text-center md:mt-0 md:w-2/6 md:text-right');
+            div3.textContent = dateFormatter.formatDate(posts[i].date);
+            div1.appendChild(div3);
+    
+            let contentDiv1 = dynamicDrawer.CreateDiv(null, 'flex flex-col items-center');
+            contentDiv1.style = 'overflow: auto;';
+            postContainer.appendChild(contentDiv1);
+    
+            let previewBtn = document.createElement('button');
+            previewBtn.textContent = 'Preview';
+            previewBtn.className = 'max-w-min';
+            contentDiv1.appendChild(previewBtn);
+    
+            AddPreviewBtnMechanic(previewBtn, postContainer);
+    
+            if(i < posts.length )
+            {
+                let hr = dynamicDrawer.CreateHR(null, 'blogpost_hr my-2');
+                hr.setAttribute('data-tag', CapitalizeFirstLetter(posts[i].game));
+                container.insertBefore(hr, navBottom);
+            }
         }
     }
 }

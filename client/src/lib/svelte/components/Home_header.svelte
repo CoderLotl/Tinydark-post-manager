@@ -1,6 +1,6 @@
 <script>
     import { Logout } from '../../js/utilities/home';    
-    import { StorageManager } from '../../js/services/StorageManager';    
+    import { StorageManager } from '../../js/services/StorageManager';
     import blob from '../../../assets/2022_sm_002.png';
     import logo_light from '../../../assets/logo_light.svg';
     

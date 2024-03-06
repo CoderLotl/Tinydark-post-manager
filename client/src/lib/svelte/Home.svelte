@@ -1,14 +1,15 @@
 <script>        
     import { afterUpdate, onMount } from 'svelte';    
-    import { GeneratePageButtons, GeneratePosts, CloseDialog, EditPost } from '../js/utilities/home';
-    import { currentPage } from '../js/stores/stores.js';
-
+    import { SetPostsPerPage, GeneratePageButtons, GeneratePosts, CloseDialog, EditPost, GetTags } from '../js/utilities/home';
+    import { StorageManager } from '../js/services/StorageManager';
     import Home_header from './components/Home_header.svelte';
-
     import blob from '../../assets/2022_sm_002.png';
     import compose from '../../assets/compose.png';
-
-    let page; $:{ page = $currentPage; }
+    
+    let sm = new StorageManager();
+    let page = sm.ReadSS('currentPage') || 1;
+    let tag = sm.ReadSS('currentTag') || 'All';
+    let posts_per_page = sm.ReadSS('posts-per-page') || 5;
 
     function afterRender(node, callback) {
         afterUpdate(() =>
@@ -17,10 +18,28 @@
         });
     }
 
+    function setPosts(event)
+    {
+        let selectedOption = event.target.value;
+        posts_per_page = selectedOption;
+        sm.WriteSS('posts-per-page', selectedOption);
+        GeneratePageButtons(page, posts_per_page);
+        GeneratePosts(page, posts_per_page);
+    }
+
+    function setTags(event)
+    {
+        let selectedTag = event.target.value;
+        tag = selectedTag;
+        sm.WriteSS('currentTag', selectedTag);
+    }
+
     onMount(async ()=>
     {
-        GeneratePageButtons();
-        GeneratePosts();
+        SetPostsPerPage(posts_per_page);
+        GetTags();
+        GeneratePageButtons(page, posts_per_page);
+        GeneratePosts(page, posts_per_page);
     });
 </script>
 
@@ -50,9 +69,30 @@
     </div>
 </dialog>
 
+<div class="flex justify-around w-full relative mt-32 bg-[#0f0f0f] pb-3">
+    <div class="flex flex-col">
+        <label for="posts-amount" class="text-orange-500">
+            Posts per Page
+        </label>
+        <select id="posts-amount" class="bg-neutral-900 text-center" on:change={setPosts}>            
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="15">15</option>
+        </select>
+    </div>
+    <div class="flex flex-col">
+        <label for="tags" class="text-orange-500">
+            Tags
+        </label>
+        <select id="tags" class="bg-neutral-900 text-center">
+            
+        </select>
+    </div>
+</div>
+
 <div class="flex flex-col items-center w-full relative">
     <div id="posts-titles-container" class="w-screen h-screen flex flex-col items-center overflow-scroll">
-        <div id="posts" class="bg-black mt-64 mb-20" style="border-radius: 20px;">
+        <div id="posts" class="bg-black mt-32 mb-20" style="border-radius: 20px;">
         </div>
     </div>
 </div>

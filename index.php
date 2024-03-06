@@ -99,6 +99,8 @@ $app->get('/posts/posts_content', \Model\Services\PostManager::class . '::Return
 
 $app->get('/posts/post', \Model\Services\PostManager::class . '::ReturnPost');
 
+$app->get('/posts/get_tags', \Model\Services\PostManager::class . '::GetTags');
+
 $app->put('/posts/save_post_changes', \Model\Services\PostManager::class . '::SavePostChanges')->add(\Model\Middlewares\Wards::class . '::IsAllowed');
 
 #endregion

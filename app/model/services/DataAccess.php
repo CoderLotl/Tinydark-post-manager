@@ -79,6 +79,20 @@ class DataAccess
         }
     }
 
+    public static function SelectDistinctColumn(string $table, string $column)
+    {
+        try
+        {
+            $statement = self::$pdo->prepare("SELECT DISTINCT $column FROM $table");
+            $statement->execute();
+            return $statement->fetchAll(PDO::FETCH_COLUMN);            
+        }
+        catch(Exception $e)
+        {
+            self::Catch($e);
+        }
+    }
+
     public static function SelectWhere(string $table, array $whereColumn, array $whereValue,  array $columns = null)
     {
         try
