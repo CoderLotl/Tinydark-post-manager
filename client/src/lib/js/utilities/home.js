@@ -169,28 +169,60 @@ export async function GeneratePosts(page = 1, postsPerPage = 5)
     
         for(let i = 0; i < posts.length; i++)
         {
-            let postContainer = dynamicDrawer.CreateDiv(null, 'container py-2 px-0 sm:px-1 blog');
+            // POST CONTAINER
+            let postContainer = dynamicDrawer.CreateDiv(null, 'flex w-full py-4 md:py-10 px-4 md:px-28 justify-between');
             postContainer.setAttribute('data-tag', CapitalizeFirstLetter(posts[i].game));        
             postContainer.setAttribute('post-attributes', JSON.stringify({game: posts[i].game, headline: posts[i].headline }));
             container.insertBefore(postContainer, navBottom);
     
-            let div1 = dynamicDrawer.CreateDiv(null, 'flex flex-wrap mb-2');
+            // POST DATA
+            let div1 = dynamicDrawer.CreateDiv(null, 'flex flex-wrap mb-2 w-3/5');
             postContainer.appendChild(div1);
-    
+            
+            // POST HEADLINE AND DETAILS
             let div2 = dynamicDrawer.CreateDiv(null, 'blog_header w-full md:w-4/6 text-center sm:text-left');
             div1.appendChild(div2);
             
+            // POST HEADLINE CONTENT
             let h2 = dynamicDrawer.CreateH(2, posts[i].headline);
             div2.appendChild(h2);
-    
+
+            // SUB DETAILS 1
+            let sub1 = dynamicDrawer.CreateDiv(null, null);
+            div2.appendChild(sub1);
+
+            let span1 = dynamicDrawer.CreateSpan(null, 'TAG: ');
+            span1.classList = 'font-bold'
+            sub1.appendChild(span1);
+
+            let tag = dynamicDrawer.CreateSpan(null, posts[i].game);            
+            tag.classList = 'italic';
+            sub1.appendChild(tag);
+
+            // SUB DETAILS 2
+            let sub2 = dynamicDrawer.CreateDiv(null, null);
+            div2.appendChild(sub2);
+
+            let span2 = dynamicDrawer.CreateSpan(null, 'URL: ');
+            span2.classList = 'font-bold'
+            sub2.appendChild(span2);
+
+            let url = dynamicDrawer.CreateSpan(null, posts[i].url);      
+            url.classList = 'italic';
+            sub2.appendChild(url);
+            
+            // POST DATE
             let div3 = dynamicDrawer.CreateDiv(null, 'w-full mt-2 text-center md:mt-0 md:w-2/6 md:text-right');
             div3.textContent = dateFormatter.formatDate(posts[i].date);
             div1.appendChild(div3);
-    
+            
+            // POST FUNCTIONS
             let contentDiv1 = dynamicDrawer.CreateDiv(null, 'flex flex-col items-center');
             contentDiv1.style = 'overflow: auto;';
             postContainer.appendChild(contentDiv1);
-    
+            
+
+            // PREVIEW FUNCTION
             let previewBtn = document.createElement('button');
             previewBtn.textContent = 'Preview';
             previewBtn.className = 'max-w-min';

@@ -150,10 +150,13 @@ export class DynamicDrawer
         return btn;
     }
 
-    CreateSpan(id, textContent = null)
+    CreateSpan(id = null, textContent = null)
     {
         let span = document.createElement('span');
-        span.id = id;
+        if(id)
+        {
+            span.id = id;
+        }
         span.textContent = textContent;
         return span;
     }
