@@ -103,10 +103,12 @@ export class DataAccessFetch
     }
     
     // DELETE
-    async deleteData(url, id)
+    async deleteData(url, params = null)
     {
+        const queryString = new URLSearchParams(params).toString();
+        const requestUrl = queryString ? `${url}?${queryString}` : url;
         try {
-            const response = await fetch(url + "/" + id,
+            const response = await fetch(requestUrl,
             {
                 method: 'DELETE',
                 headers:
@@ -114,7 +116,14 @@ export class DataAccessFetch
                     'Content-Type': 'application/json'
                 }
             });
-            return `${response.status}: ${response.statusText}`;            
+            if(response)
+            {
+                return response;
+            }
+            else
+            {
+                return false;
+            }
         }
         catch (error)
         {

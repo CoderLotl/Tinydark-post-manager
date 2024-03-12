@@ -1,16 +1,18 @@
 <script>        
     import { afterUpdate, onMount } from 'svelte';    
-    import { SetPostsPerPage, GeneratePageButtons, GeneratePosts, CloseDialog, EditPost, GetTags } from '../js/utilities/home';
+    import { SetPostsPerPage, GeneratePageButtons, GeneratePosts, CloseDialog, CloseDeleteDialog, EditPost, ConfirmDeleteDialog, GetTags } from '../js/utilities/home';
     import { StorageManager } from '../js/services/StorageManager';
     import Home_header from './components/Home_header.svelte';
     import blob from '../../assets/2022_sm_002.png';
     import compose from '../../assets/compose.png';
     
+    // These variables are only used when the component loads.
     let sm = new StorageManager();
     let page = sm.ReadSS('currentPage') || 1;
     let tag = sm.ReadSS('currentTag') || 'All';
     let posts_per_page = sm.ReadSS('posts-per-page') || 5;
 
+    // FUNCTIONS
     function afterRender(node, callback) {
         afterUpdate(() =>
         {
@@ -54,7 +56,7 @@
     </div>
 </Home_header>
 
-<dialog id="dialog" class="post-dialog w-full md:w-3/5 h-3/4">
+<dialog id="dialog" class="post-dialog w-full md:w-3/5 h-3/4 top-24 md:top-36">
     <p id="dialog-title"></p>    
     <div id="dialogContent" class="post-dialogContent">
         <!-- DIALOG CONTENT -->
@@ -69,6 +71,19 @@
     </div>
 </dialog>
 
+<dialog id="confirm-dialog" class="post-dialog w-full md:w-2/5 h-1/4 top-64">
+    <p id="confirm-dialog-title"></p>
+    <div class="flex justify-self-center mt-6">
+        <button id="btnDeny" class="mr-3" on:click={CloseDeleteDialog}>
+            No
+        </button>
+        <button id="btnConfirm" class="ml-6" on:click={ConfirmDeleteDialog}>
+            Yes
+        </button>
+    </div>
+</dialog>
+
+<!-- DROPDOWN SELECTORS -->
 <div class="flex justify-around w-full relative mt-32 bg-[#0f0f0f] pb-3">
     <div class="flex flex-col">
         <label for="posts-amount" class="text-orange-500">
@@ -90,9 +105,10 @@
     </div>
 </div>
 
+<!-- POSTS SECTION -->
 <div class="flex flex-col items-center w-full relative">
     <div id="posts-titles-container" class="w-full h-full flex flex-col items-center overflow-visible">
-        <div id="posts" class="w-full flex flex-col items-center md:w-3/4 bg-black mt-32 mb-20 rounderd-[20px]">
+        <div id="posts" class="w-full flex flex-col items-center md:w-3/4 bg-black md:mt-20 mb-20 rounderd-[20px]">
         </div>
     </div>
 </div>

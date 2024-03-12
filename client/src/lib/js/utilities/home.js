@@ -70,6 +70,8 @@ export async function Logout()
     }
 }
 
+// - - - - - [ NAV BUTTONS ]
+
 export async function GeneratePageButtons(page = 1, postsPerPage = 5)
 {
     let pageButtons = document.getElementById('page_buttons');
@@ -130,6 +132,8 @@ function AddPaginationMechanic(btn)
     });
 }
 
+// - - - - - [ TAGS & POSTS PER PAGE ]
+
 export async function GetTags()
 {
     let tagsSelect = document.getElementById('tags');
@@ -172,17 +176,6 @@ export async function SetPostsPerPage(postsPerPage)
     select.selectedIndex = selectedIndex;
 }
 
-export async function GetPosts(page, amount)
-{
-    let payload = {page: page, posts_amount: amount}
-    let serverResponse = await dataAccess.getData('http://localhost:8000/posts/posts_content', payload);
-    if(serverResponse)
-    {
-        let resp = await serverResponse.json();        
-        return resp['response'];
-    }
-}
-
 export async function GeneratePosts(page = 1, postsPerPage = 5)
 {
     let container = document.getElementById('posts');
@@ -193,11 +186,11 @@ export async function GeneratePosts(page = 1, postsPerPage = 5)
         let navBottom = container.children[0];
     
         for(let i = 0; i < posts.length; i++)
-        {
+        {            
             // POST CONTAINER
             let postContainer = dynamicDrawer.CreateDiv(null, 'flex w-full py-4 md:py-10 px-4 md:px-28 justify-between');
             postContainer.setAttribute('data-tag', CapitalizeFirstLetter(posts[i].game));        
-            postContainer.setAttribute('post-attributes', JSON.stringify({game: posts[i].game, headline: posts[i].headline }));
+            postContainer.setAttribute('post-attributes', JSON.stringify({game: posts[i].game, headline: posts[i].headline, object_id: posts[i].object_id }));
             container.insertBefore(postContainer, navBottom);
     
             // POST DATA
@@ -267,6 +260,7 @@ export async function GeneratePosts(page = 1, postsPerPage = 5)
     
             AddPreviewBtnMechanic(previewBtn, postContainer);
             AddEditBtnMechanic(editBtn, postContainer);
+            AddDeleteBtnMechanic(deleteBtn, postContainer);
     
             if(i < posts.length )
             {
@@ -278,6 +272,23 @@ export async function GeneratePosts(page = 1, postsPerPage = 5)
     }
 }
 
+export async function GetPosts(page, amount)
+{
+    let payload = {page: page, posts_amount: amount}
+    let serverResponse = await dataAccess.getData('http://localhost:8000/posts/posts_content', payload);
+    if(serverResponse)
+    {
+        let resp = await serverResponse.json();        
+        return resp['response'];
+    }
+}
+
+/**
+ * Retrieves some of the post's attributes stored as properties in a HTML element.
+ * Uses those attributes GET the post from the back and return the whole post.
+ * @param {*} postContainer 
+ * @returns array || false
+ */
 async function GetPostContent(postContainer)
 {    
     let params = JSON.parse(postContainer.getAttribute('post-attributes'));
@@ -287,20 +298,10 @@ async function GetPostContent(postContainer)
         let resp = await serverResponse.json();        
         return resp['response'][0];
     }
+    return false;
 }
 
-async function AddEditBtnMechanic(btn, postContainer)
-{
-    let postContent = await GetPostContent(postContainer);
-    if(postContent)
-    {
-        btn.addEventListener('click', ()=>
-        {
-            storageManager.WriteSS('post',JSON.stringify(postContent));
-            navigate('/edit_post');
-        });
-    }
-}
+// - - - - - [ POST BUTTONS ]
 
 function AddPreviewBtnMechanic(btn, postContainer)
 {
@@ -313,12 +314,33 @@ function AddPreviewBtnMechanic(btn, postContainer)
         {            
             dialogTitle.textContent = `"${post.headline} - ${post.date}"`;
             dialogContent.setAttribute('post-attributes', JSON.stringify({game: post.game, headline: post.headline, object_id: post.object_id, url: post.url }));
-            dialogContent.innerHTML = post.content;
-            dialog.open = true;
+            dialogContent.innerHTML = post.content;                        
             document.getElementById('dialog').style.display = 'flex';
         }
     });
 }
+
+async function AddEditBtnMechanic(btn, postContainer)
+{
+    btn.addEventListener('click', async ()=>
+    {
+        let postContent = await GetPostContent(postContainer);
+        storageManager.WriteSS('post',JSON.stringify(postContent));
+        navigate('/edit_post');
+    });
+}
+
+async function AddDeleteBtnMechanic(btn, postContainer)
+{
+    btn.addEventListener('click', async ()=>
+    {
+        let postAttributes = JSON.parse(postContainer.getAttribute('post-attributes'));
+        document.getElementById('confirm-dialog').style.display = 'grid';
+        storageManager.WriteSS('delete-post', postAttributes.object_id);
+    });
+}
+
+// - - - - - [ EDIT DIALOG BUTTONS ]
 
 export function EditPost()
 {
@@ -334,6 +356,23 @@ export function CloseDialog()
     let dialog = document.getElementById('dialog');
     dialog.style.display = '';
     dialog.close();
+}
+
+// - - - - - [ DELETE DIALOG BUTTONS ]
+
+export function CloseDeleteDialog()
+{
+    document.getElementById('confirm-dialog').style.display = '';    
+}
+
+export async function ConfirmDeleteDialog()
+{
+    let object_id = storageManager.ReadSS('delete-post');
+    let payload = {object_id: object_id};
+    if(object_id)
+    {
+        let serverResponse = await dataAccess.deleteData('http://localhost:8000/posts/delete_post', payload);
+    }
 }
 
 // ------------------------------------

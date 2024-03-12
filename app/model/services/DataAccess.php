@@ -231,6 +231,21 @@ class DataAccess
         }
     }
 
+    public static function Delete(string $table, $whereColumn, $whereValue)
+    {
+        try
+        {
+            $query = "DELETE FROM $table WHERE $whereColumn = '$whereValue'";            
+            $statement = self::$pdo->prepare($query);
+            $statement->execute();
+            return $statement->rowCount() > 0;
+        }
+        catch(Exception $e)
+        {
+            self::Catch($e);
+        }
+    }
+
     public static function GetID($table)
     {
         $id = 0;

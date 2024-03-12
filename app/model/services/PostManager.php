@@ -7,6 +7,15 @@ class PostManager
 {
     // - - - - - - - - - - - - - PUBLIC FUNCTIONS
 
+    
+    /**
+     * Receives a number representing the amount of posts per page.
+     * Returns the amount of pages required to visualize all the posts.
+     * @param mixed $request
+     * @param mixed $response
+     * 
+     * @return [type]
+     */
     public static function CountPostsPages($request, $response)
     {
         $params = self::GetRequest($request);
@@ -15,12 +24,27 @@ class PostManager
         return self::ReturnResponse($request, $response, ceil($count / $postsPerPage), 200);
     }
 
+    /**
+     * Returns the posts tags in the DB.
+     * @param mixed $request
+     * @param mixed $response
+     * 
+     * @return [type]
+     */
     public static function GetTags($request, $response)
     {        
         $tags = DataAccess::SelectDistinctColumn(POSTS, 'game');
         return self::ReturnResponse($request, $response, $tags, 200);
     }
 
+    /**
+     * Returns all the posts corresponding to the page the client is requesting, considering the amount of posts per page.
+     * The posts are sorted from newest to older.
+     * @param mixed $request
+     * @param mixed $response
+     * 
+     * @return [type]
+     */
     public static function ReturnPosts($request, $response)
     {
         $params = self::GetRequest($request);
@@ -28,6 +52,13 @@ class PostManager
         return self::ReturnResponse($request, $response, $posts, 200);
     }
 
+    /**
+     * Returns a single post, given the headline and the game tag.
+     * @param mixed $request
+     * @param mixed $response
+     * 
+     * @return [type]
+     */
     public static function ReturnPost($request, $response)
     {
         $params = self::GetRequest($request);
@@ -35,6 +66,13 @@ class PostManager
         return self::ReturnResponse($request, $response, $post_content, 200);
     }
 
+    /**
+     * Receives all the data of a post. Updates all the data of the post on the DB according to the data received.
+     * @param mixed $request
+     * @param mixed $response
+     * 
+     * @return [type]
+     */
     public static function SavePostChanges($request, $response)
     {
         $params = self::GetRequest($request);
@@ -54,6 +92,19 @@ class PostManager
             return self::ReturnResponse($request, $response, 'ERROR UPDATING', 400);
         }
     }
+
+    public static function DeletePost($request, $response)
+    {
+        $params = self::GetRequest($request);        
+        $delete = DataAccess::Delete(POSTS, 'object_id', $params['object_id']);
+        if($delete)
+        {            
+            return self::ReturnResponse($request, $response, true, 200);
+        }
+        return self::ReturnResponse($request, $response, false, 400);
+    }
+
+    // ------------------------------------------------------------------------------------
 
     private static function GetRequest($request)
     {        

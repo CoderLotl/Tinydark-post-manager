@@ -103,7 +103,7 @@ $app->get('/posts/get_tags', \Model\Services\PostManager::class . '::GetTags');
 
 $app->put('/posts/save_post_changes', \Model\Services\PostManager::class . '::SavePostChanges')->add(\Model\Middlewares\Wards::class . '::IsAllowed');
 
-$app->put('/posts/delete_post', \Model\Services\PostManager::class . '::DeletePost')->add(\Model\Middlewares\Wards::class . '::IsAllowed');
+$app->delete('/posts/delete_post', \Model\Services\PostManager::class . '::DeletePost')->add(\Model\Middlewares\Wards::class . '::IsAllowed');
 
 #endregion
 
