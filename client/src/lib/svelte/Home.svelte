@@ -92,7 +92,7 @@
 
 <div class="flex flex-col items-center w-full relative">
     <div id="posts-titles-container" class="w-full h-full flex flex-col items-center overflow-visible">
-        <div id="posts" class="w-full flex flex-col items-center md:w-3/4 bg-black mt-32 mb-20" style="border-radius: 20px;">
+        <div id="posts" class="w-full flex flex-col items-center md:w-3/4 bg-black mt-32 mb-20 rounderd-[20px]">
         </div>
     </div>
 </div>

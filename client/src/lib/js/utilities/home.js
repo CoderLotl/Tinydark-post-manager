@@ -85,7 +85,7 @@ export async function GeneratePageButtons(page = 1, postsPerPage = 5)
         for(let i = 0; i < pages; i++)
         {
             let btn = document.createElement('button');
-            btn.classList.add('page_number_bottom', 'num');
+            btn.classList.add('page_button', 'num');
             btn.value = i + 1;
             btn.textContent = i + 1;
 
@@ -93,6 +93,8 @@ export async function GeneratePageButtons(page = 1, postsPerPage = 5)
             {
                 btn.disabled = 'disabled';
             }
+
+            AddPaginationMechanic(btn);
 
             pageButtons.appendChild(btn);            
         }        
@@ -103,6 +105,29 @@ export async function GeneratePageButtons(page = 1, postsPerPage = 5)
         console.log(serverResponse);
         return { success: false, error: 'Error contacting the server.' };
     }
+}
+
+function AddPaginationMechanic(btn)
+{
+    btn.addEventListener('click', ()=>
+    {
+        let buttons = document.getElementsByClassName('page_button');
+        let page = btn.value;
+        storageManager.WriteSS('currentPage', page);
+        let posts_per_page = storageManager.ReadSS('posts-per-page') || 5;
+
+        for(let i = 0; i < buttons.length; i++)
+        {
+            if(buttons[i].hasAttribute('disabled'))
+            {
+                buttons[i].removeAttribute('disabled');
+            }
+        }
+
+        btn.setAttribute('disabled', "");
+
+        GeneratePosts(page, posts_per_page);
+    });
 }
 
 export async function GetTags()
@@ -225,10 +250,23 @@ export async function GeneratePosts(page = 1, postsPerPage = 5)
             // PREVIEW FUNCTION
             let previewBtn = document.createElement('button');
             previewBtn.textContent = 'Preview';
-            previewBtn.className = 'max-w-min';
+            previewBtn.className = 'w-full rounded-xl';
             contentDiv1.appendChild(previewBtn);
+
+            // EDIT FUNCTION
+            let editBtn = document.createElement('button');
+            editBtn.textContent = 'Edit';
+            editBtn.className = 'w-full rounded-xl mt-3';
+            contentDiv1.appendChild(editBtn);
+
+            // DELETE FUNCTION
+            let deleteBtn = document.createElement('button');
+            deleteBtn.textContent = 'Delete';
+            deleteBtn.className = 'w-full rounded-xl mt-3';
+            contentDiv1.appendChild(deleteBtn);
     
             AddPreviewBtnMechanic(previewBtn, postContainer);
+            AddEditBtnMechanic(editBtn, postContainer);
     
             if(i < posts.length )
             {
@@ -248,6 +286,19 @@ async function GetPostContent(postContainer)
     {
         let resp = await serverResponse.json();        
         return resp['response'][0];
+    }
+}
+
+async function AddEditBtnMechanic(btn, postContainer)
+{
+    let postContent = await GetPostContent(postContainer);
+    if(postContent)
+    {
+        btn.addEventListener('click', ()=>
+        {
+            storageManager.WriteSS('post',JSON.stringify(postContent));
+            navigate('/edit_post');
+        });
     }
 }
 
