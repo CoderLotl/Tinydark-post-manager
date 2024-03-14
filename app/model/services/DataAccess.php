@@ -16,11 +16,22 @@ class DataAccess
         return false;
     }
 
-    public static function Count(string $table)
+    public static function Count(string $table, $whereColumn = null, $whereValue = null)
     {
         try
-        {
-            $statement = self::$pdo->prepare("SELECT COUNT(*) FROM $table");
+        {            
+            $statement = null;
+            $query = '';
+            if($whereColumn && $whereValue)
+            {
+                $query = "SELECT COUNT(*) FROM $table WHERE $whereColumn='$whereValue'";
+            }
+            else
+            {
+                $query = "SELECT COUNT(*) FROM $table";
+            }
+
+            $statement = self::$pdo->prepare($query);
             $statement->execute();
             return $statement->fetchColumn();
         }
@@ -34,7 +45,7 @@ class DataAccess
      * Returns a group of entries equal to $groupsize. The number of the group will be equal to $selectedGroup.
      * 
      */
-    public static function ReturnByGroups(string $table, int $selectedGroup, int $groupSize, string $orderByColumn = null, bool $desc = true)
+    public static function ReturnByGroups(string $table, int $selectedGroup, int $groupSize, string $orderByColumn = null, bool $desc = true, $whereColumn = null, $whereValue = null)
     {
         $offset = ($selectedGroup - 1) * $groupSize;
         $order = '';
@@ -48,8 +59,17 @@ class DataAccess
         }
 
         try
-        {            
-            $statement = self::$pdo->prepare("SELECT * FROM $table $order LIMIT $groupSize OFFSET $offset");
+        {
+            $query = '';
+            if($whereColumn && $whereValue)
+            {
+                $query = "SELECT * FROM $table WHERE $whereColumn='$whereValue' $order LIMIT $groupSize OFFSET $offset";
+            }
+            else
+            {
+                $query = "SELECT * FROM $table $order LIMIT $groupSize OFFSET $offset";
+            }
+            $statement = self::$pdo->prepare($query);
             $statement->execute();
             return $statement->fetchAll(PDO::FETCH_ASSOC);
         }

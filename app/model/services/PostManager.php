@@ -20,7 +20,16 @@ class PostManager
     {
         $params = self::GetRequest($request);
         $postsPerPage = $params['posts_per_page'];
-        $count = DataAccess::Count(POSTS);
+        $count = null;
+        if($params['tag'] != 'All')
+        {
+            $count = DataAccess::Count(POSTS, 'game', $params['tag']);
+        }
+        else
+        {
+            $count = DataAccess::Count(POSTS);
+        }
+
         return self::ReturnResponse($request, $response, ceil($count / $postsPerPage), 200);
     }
 
@@ -48,7 +57,15 @@ class PostManager
     public static function ReturnPosts($request, $response)
     {
         $params = self::GetRequest($request);
-        $posts = DataAccess::ReturnByGroups(POSTS, $params['page'], $params['posts_amount'], 'date');
+        $posts = null;
+        if($params['tag'] != 'All')
+        {
+            $posts = DataAccess::ReturnByGroups(POSTS, $params['page'], $params['posts_amount'], 'date', true, 'game', $params['tag']);
+        }
+        else
+        {
+            $posts = DataAccess::ReturnByGroups(POSTS, $params['page'], $params['posts_amount'], 'date');
+        }
         return self::ReturnResponse($request, $response, $posts, 200);
     }
 

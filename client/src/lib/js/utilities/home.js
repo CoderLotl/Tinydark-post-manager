@@ -1,5 +1,4 @@
 import { navigate } from 'svelte-routing';
-import { get } from 'svelte/store';
 import { DataAccessFetch } from "../services/DataAccessFetch.js";
 import { StorageManager } from '../services/StorageManager.js';
 import { DynamicDrawer } from '../services/DynamicDrawer.js';
@@ -72,17 +71,21 @@ export async function Logout()
 
 // - - - - - [ NAV BUTTONS ]
 
-export async function GeneratePageButtons(page = 1, postsPerPage = 5)
+export async function GeneratePageButtons()
 {
+    let page = storageManager.ReadSS('currentPage') || 1;
+    let postsPerPage = storageManager.ReadSS('posts-per-page') || 5;
+    let tag = storageManager.ReadSS('currentTag') || 'All';
+
     let pageButtons = document.getElementById('page_buttons');
-    let payload = { posts_per_page: postsPerPage };
+    let payload = { posts_per_page: postsPerPage, tag: tag };
     let serverResponse = await dataAccess.getData('http://localhost:8000/posts/pages_count', payload);
     
     if(serverResponse)
     {
-        let resp = await serverResponse.json();
+        let resp = await serverResponse.json();        
         let pages = JSON.parse(resp['response']);
-        pageButtons.innerHTML = '';
+        pageButtons.innerHTML = '';        
         
         for(let i = 0; i < pages; i++)
         {
@@ -128,7 +131,7 @@ function AddPaginationMechanic(btn)
 
         btn.setAttribute('disabled', "");
 
-        GeneratePosts(page, posts_per_page);
+        GeneratePosts();
     });
 }
 
@@ -137,10 +140,17 @@ function AddPaginationMechanic(btn)
 export async function GetTags()
 {
     let tagsSelect = document.getElementById('tags');
+    let selectedTag = storageManager.ReadSS('currentTag') || null;
+    
     let defaultOption = document.createElement('option');
     defaultOption.textContent = 'All';
-    defaultOption.value = 'All';
+    defaultOption.value = 'All';    
     tagsSelect.appendChild(defaultOption);
+
+    if(!selectedTag)
+    {
+        defaultOption.selected = true;
+    }
 
     let serverResponse = await dataAccess.getData('http://localhost:8000/posts/get_tags');
     if(serverResponse)
@@ -152,7 +162,16 @@ export async function GetTags()
             let opt = document.createElement('option');
             opt.textContent = options[i];
             opt.value = options[i];
-            tagsSelect.appendChild(opt);
+            tagsSelect.appendChild(opt);            
+        }
+
+        let tags = document.querySelectorAll('#tags option');
+        for(let i = 0; i < tags.length; i++)
+        {
+            if(selectedTag && tags[i].value == selectedTag)
+            {
+                tags[i].selected = true;
+            }
         }
     }
 }
@@ -176,10 +195,14 @@ export async function SetPostsPerPage(postsPerPage)
     select.selectedIndex = selectedIndex;
 }
 
-export async function GeneratePosts(page = 1, postsPerPage = 5)
+export async function GeneratePosts()
 {
+    let page = storageManager.ReadSS('currentPage') || 1;
+    let tag = storageManager.ReadSS('currentTag') || 'All';
+    let postsPerPage = storageManager.ReadSS('posts-per-page') || 5;
+
     let container = document.getElementById('posts');
-    let posts = await GetPosts(page, postsPerPage);
+    let posts = await GetPosts(page, postsPerPage, tag);
     if(posts)
     {
         container.innerHTML = '';
@@ -235,7 +258,7 @@ export async function GeneratePosts(page = 1, postsPerPage = 5)
             div1.appendChild(div3);
             
             // POST FUNCTIONS
-            let contentDiv1 = dynamicDrawer.CreateDiv(null, 'flex flex-col items-center');
+            let contentDiv1 = dynamicDrawer.CreateDiv(null, 'flex flex-col items-center p-3');
             contentDiv1.style = 'overflow: auto;';
             postContainer.appendChild(contentDiv1);
             
@@ -272,9 +295,9 @@ export async function GeneratePosts(page = 1, postsPerPage = 5)
     }
 }
 
-export async function GetPosts(page, amount)
+export async function GetPosts(page, amount, tag)
 {
-    let payload = {page: page, posts_amount: amount}
+    let payload = {page: page, posts_amount: amount, tag: tag}
     let serverResponse = await dataAccess.getData('http://localhost:8000/posts/posts_content', payload);
     if(serverResponse)
     {
@@ -362,7 +385,7 @@ export function CloseDialog()
 
 export function CloseDeleteDialog()
 {
-    document.getElementById('confirm-dialog').style.display = '';    
+    document.getElementById('confirm-dialog').style.display = '';
 }
 
 export async function ConfirmDeleteDialog()
@@ -372,7 +395,33 @@ export async function ConfirmDeleteDialog()
     if(object_id)
     {
         let serverResponse = await dataAccess.deleteData('http://localhost:8000/posts/delete_post', payload);
+        if(serverResponse.ok)
+        {
+            GeneratePageButtons();
+            GeneratePosts();
+            storageManager.RemoveSS('delete-post');
+        }
     }
+    CloseDeleteDialog();
+}
+
+// - - - - - [ EXTRAS ]
+
+export function SetPosts(event)
+{
+    let selectedOption = event.target.value;        
+    storageManager.WriteSS('posts-per-page', selectedOption);
+    storageManager.WriteSS('currentPage', 1);
+    GeneratePageButtons();
+    GeneratePosts();
+}
+
+export function SetTags(event)
+{
+    let selectedTag = event.target.value;    
+    storageManager.WriteSS('currentTag', selectedTag);
+    GeneratePageButtons();
+    GeneratePosts();
 }
 
 // ------------------------------------
