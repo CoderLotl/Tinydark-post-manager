@@ -10,10 +10,6 @@
     import Home_header from './components/Home_header.svelte';
     import blob from '../../assets/2022_sm_002.png';
     import compose from '../../assets/compose.png';
-    
-    // These variables are only used when the component loads.
-    let sm = new StorageManager();
-    let posts_per_page = sm.ReadSS('posts-per-page') || 5;
 
     // FUNCTIONS
     function afterRender(node, callback) {
@@ -25,7 +21,7 @@
 
     onMount(async ()=>
     {
-        SetPostsPerPage(posts_per_page);
+        SetPostsPerPage();
         GetTags();
         GeneratePageButtons();
         GeneratePosts();

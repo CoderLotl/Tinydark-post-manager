@@ -176,8 +176,9 @@ export async function GetTags()
     }
 }
 
-export async function SetPostsPerPage(postsPerPage)
+export async function SetPostsPerPage()
 {
+    let postsPerPage = storageManager.ReadSS('posts-per-page') || 5;
     let select = document.getElementById('posts-amount');
     let selectedIndex;
     switch(postsPerPage)
