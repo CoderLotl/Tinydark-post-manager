@@ -27,9 +27,18 @@ export async function SavePostChanges(postContent, isNewPost)
         document.getElementById('dialog').classList.add('flex');
         if(serverResponse.ok)
         {
+            let msg;
+            if(isNewPost)
+            {
+                msg = 'Post Created!';
+            }
+            else
+            {
+                msg = 'Post Updated!';
+            }
             server_resp.src = checked;
             server_resp.style.backgroundColor = '#a8ccb2';
-            server_msg.textContent = 'Post updated! Returning...';
+            server_msg.textContent = `${msg} Returning...`;
             setTimeout(() => {
                 navigate('/home');
             }, 2000);
@@ -38,7 +47,7 @@ export async function SavePostChanges(postContent, isNewPost)
         {
             server_resp.src = error;
             server_resp.style.backgroundColor = 'rgb(255, 255, 255)';
-            server_msg.textContent = 'Error: action unathorized';
+            server_msg.textContent = 'Error: unathorized action';
         }
     }
     else
