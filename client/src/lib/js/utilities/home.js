@@ -214,7 +214,7 @@ export async function GeneratePosts()
             // POST CONTAINER
             let postContainer = dynamicDrawer.CreateDiv(null, 'flex w-full py-4 md:py-10 px-4 md:px-28 justify-between');
             postContainer.setAttribute('data-tag', CapitalizeFirstLetter(posts[i].game));        
-            postContainer.setAttribute('post-attributes', JSON.stringify({game: posts[i].game, headline: posts[i].headline, object_id: posts[i].object_id }));
+            postContainer.setAttribute('post-attributes', JSON.stringify({game: posts[i].game, headline: posts[i].headline, id: posts[i].id }));
             container.insertBefore(postContainer, navBottom);
     
             // POST DATA
@@ -337,7 +337,7 @@ function AddPreviewBtnMechanic(btn, postContainer)
         if(post)
         {            
             dialogTitle.textContent = `"${post.headline} - ${post.date}"`;
-            dialogContent.setAttribute('post-attributes', JSON.stringify({game: post.game, headline: post.headline, object_id: post.object_id, url: post.url }));
+            dialogContent.setAttribute('post-attributes', JSON.stringify({game: post.game, headline: post.headline, id: post.id, url: post.url }));
             dialogContent.innerHTML = post.content;                        
             document.getElementById('dialog').style.display = 'flex';
         }
@@ -350,6 +350,7 @@ async function AddEditBtnMechanic(btn, postContainer)
     {
         let postContent = await GetPostContent(postContainer);
         storageManager.WriteSS('post',JSON.stringify(postContent));
+        storageManager.WriteSS('createPost', false);
         navigate('/edit_post');
     });
 }
@@ -360,7 +361,7 @@ async function AddDeleteBtnMechanic(btn, postContainer)
     {
         let postAttributes = JSON.parse(postContainer.getAttribute('post-attributes'));
         document.getElementById('confirm-dialog').style.display = 'grid';
-        storageManager.WriteSS('delete-post', postAttributes.object_id);
+        storageManager.WriteSS('delete-post', postAttributes.id);
     });
 }
 
@@ -372,6 +373,7 @@ export function EditPost()
     let postAttributes = JSON.parse(dialogContent.getAttribute('post-attributes'));
     postAttributes.content = dialogContent.innerHTML;
     storageManager.WriteSS('post',JSON.stringify(postAttributes));
+    storageManager.WriteSS('createPost', false);
     navigate('/edit_post');
 }
 
@@ -391,9 +393,9 @@ export function CloseDeleteDialog()
 
 export async function ConfirmDeleteDialog()
 {
-    let object_id = storageManager.ReadSS('delete-post');
-    let payload = {object_id: object_id};
-    if(object_id)
+    let id = storageManager.ReadSS('delete-post');
+    let payload = {id: id};
+    if(id)
     {
         let serverResponse = await dataAccess.deleteData('http://localhost:8000/posts/delete_post', payload);
         if(serverResponse.ok)
@@ -423,6 +425,12 @@ export function SetTags(event)
     storageManager.WriteSS('currentTag', selectedTag);
     GeneratePageButtons();
     GeneratePosts();
+}
+
+export function CreatePost()
+{
+    storageManager.WriteSS('createPost', true);
+    navigate('/edit_post');
 }
 
 // ------------------------------------

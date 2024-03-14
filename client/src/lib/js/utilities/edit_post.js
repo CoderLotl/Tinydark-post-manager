@@ -6,10 +6,20 @@ import error_net from '../../../assets/error_net.png';
 
 let dataAccess = new DataAccessFetch();
 
-export async function SavePostChanges(postContent)
+export async function SavePostChanges(postContent, isNewPost)
 {
     let payload = postContent;
-    let serverResponse = await dataAccess.putData('http://localhost:8000/posts/save_post_changes', payload);
+    let serverResponse;
+
+    if(isNewPost)
+    {
+        serverResponse = await dataAccess.postData('http://localhost:8000/posts/create_posts', payload);
+    }
+    else
+    {
+        serverResponse = await dataAccess.putData('http://localhost:8000/posts/save_post_changes', payload);
+    }
+
     let server_resp = document.getElementById('server-response');
     let server_msg = document.getElementById('server-message');        
     if(serverResponse)

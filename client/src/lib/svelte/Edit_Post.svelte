@@ -8,6 +8,7 @@
     
     let storageManager = new StorageManager();
     let postContent = JSON.parse(storageManager.ReadSS('post'));
+    let newPost = storageManager.ReadSS('createPost') == 'false' ? false : true;    
 
     let quill;
     let quill2;
@@ -27,10 +28,13 @@
         quill3 = new Quill('#game-editor');
         quill4 = new Quill('#url-editor');
 
-        quill.root.innerHTML = postContent.content;
-        quill2.root.innerHTML = postContent.headline;
-        quill3.root.innerHTML = postContent.game;
-        quill4.root.innerHTML = postContent.url;
+        if(newPost == false)
+        {
+            quill.root.innerHTML = postContent.content;
+            quill2.root.innerHTML = postContent.headline;
+            quill3.root.innerHTML = postContent.game;
+            quill4.root.innerHTML = postContent.url;
+        }
 
         window.addEventListener('click', ()=>
         {            
@@ -49,10 +53,11 @@
             content: quill.root.innerHTML,
             headline: quill2.getText().trim(),
             game: quill3.getText().trim(),
-            object_id: postContent.object_id
+            url: quill4.getText().trim(),
+            id: postContent.id
         };
         
-        SavePostChanges(newPostContent);
+        SavePostChanges(newPostContent, newPost);
     }    
 </script>
 

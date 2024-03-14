@@ -4,9 +4,8 @@
     {
         SetPostsPerPage, GeneratePageButtons, GeneratePosts, CloseDialog,
         CloseDeleteDialog, EditPost, ConfirmDeleteDialog, GetTags, SetPosts,
-        SetTags
-    } from '../js/utilities/home';
-    import { StorageManager } from '../js/services/StorageManager';
+        SetTags, CreatePost
+    } from '../js/utilities/home';    
     import Home_header from './components/Home_header.svelte';
     import blob from '../../assets/2022_sm_002.png';
     import compose from '../../assets/compose.png';
@@ -92,7 +91,7 @@
 <div class="flex flex-col items-center w-full relative">
     <div id="posts-titles-container" class="w-full h-full flex flex-col items-center overflow-visible md:mt-20">
         <div class="w-full md:w-3/4 bg-[#0f0f0f] md:rounded-t-[20px] p-3">
-            <button class="rounded-xl">
+            <button class="rounded-xl" on:click={CreatePost}>
                 Create New Post
             </button>
         </div>

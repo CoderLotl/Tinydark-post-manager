@@ -1,6 +1,8 @@
 <?php
 
 namespace Model\Services;
+
+use DateTime;
 use Model\Services\DataAccess;
 
 class PostManager
@@ -83,6 +85,28 @@ class PostManager
         return self::ReturnResponse($request, $response, $post_content, 200);
     }
 
+    public static function CreatePost($request, $response)
+    {
+        $params = self::GetRequest($request);
+
+        $date = new DateTime();
+        $dateString = $date->format('Y-m-d H:i:s');
+
+        $create = DataAccess::Insert(
+            POSTS,
+            ['game', 'headline', 'content', 'url', 'date'],
+            [$params['game'], $params['headline'], $params['content'], $params['url'], $dateString]
+        );
+        if($create)
+        {
+            return self::ReturnResponse($request, $response, 'OK', 200);
+        }
+        else
+        {
+            return self::ReturnResponse($request, $response, 'ERROR UPDATING', 400);
+        }
+    }
+
     /**
      * Receives all the data of a post. Updates all the data of the post on the DB according to the data received.
      * @param mixed $request
@@ -95,10 +119,10 @@ class PostManager
         $params = self::GetRequest($request);
         $update = DataAccess::Update(
             POSTS,
-            ['game', 'headline', 'content'],
-            [$params['game'], $params['headline'], $params['content'] ],
-            'object_id',
-            $params['object_id']
+            ['game', 'headline', 'content', 'url'],
+            [$params['game'], $params['headline'], $params['content'], $params['url'] ],
+            'id',
+            $params['id']
         );
         if($update)
         {
@@ -113,7 +137,7 @@ class PostManager
     public static function DeletePost($request, $response)
     {
         $params = self::GetRequest($request);        
-        $delete = DataAccess::Delete(POSTS, 'object_id', $params['object_id']);
+        $delete = DataAccess::Delete(POSTS, 'id', $params['id']);
         if($delete)
         {            
             return self::ReturnResponse($request, $response, true, 200);
