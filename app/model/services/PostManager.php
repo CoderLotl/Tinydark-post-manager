@@ -91,7 +91,7 @@ class PostManager
         $posts = null;
         if($params['tag'] != 'All')
         {
-            $posts = DataAccess::ReturnByGroups(POSTS, $params['page'], $params['posts_amount'], 'date', true, 'game', $params['tag']);
+            $posts = DataAccess::ReturnByGroupsJSONSearch(POSTS, $params['page'], $params['posts_amount'], 'game', $params['tag'], 'tags', 'date', true);            
         }
         else
         {
@@ -127,13 +127,11 @@ class PostManager
         
         foreach($tags as $tag)
         {
-            $post_content[0]['game'] .= $tag;
-            Log::WriteLog('aaa.txt', $tag);
+            $post_content[0]['game'] .= $tag;            
             if($tag !== end($tags))
             {                
                 $post_content[0]['game'] .= ', ';
-            }
-            Log::WriteLog('aaa.txt', json_encode($post_content[0]['game']));
+            }            
         }
 
         return self::ReturnResponse($request, $response, $post_content, 200);
@@ -151,7 +149,7 @@ class PostManager
         $create = DataAccess::Insert(
             POSTS,
             ['game', 'headline', 'content', 'url', 'date'],
-            [$params['game'], $params['headline'], $params['content'], $params['url'], $dateString]
+            [json_encode(["tags"=> $params['game']]), $params['headline'], $params['content'], $params['url'], $dateString]
         );
         if($create)
         {
@@ -176,7 +174,7 @@ class PostManager
         $update = DataAccess::Update(
             POSTS,
             ['game', 'headline', 'content', 'url'],
-            [$params['game'], $params['headline'], $params['content'], $params['url'] ],
+            [json_encode(["tags"=> $params['game']]), $params['headline'], $params['content'], $params['url'] ],
             'id',
             $params['id']
         );

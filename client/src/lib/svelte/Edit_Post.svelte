@@ -96,7 +96,7 @@
                 </label>
                 <div id="element-tags" class="w-ful mb-2">
                 </div>
-                <input type="text" id="game-editor" class="editor w-1/2 rounded-3xl pr-0 pl-3 md:pl-3 italic">
+                <input type="text" placeholder="Write some tag name here" id="game-editor" class="editor w-1/2 rounded-3xl pr-0 pl-3 md:pl-3 italic">
             </div>
         </div>
     </fieldset>    

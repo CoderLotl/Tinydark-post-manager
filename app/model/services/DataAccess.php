@@ -79,6 +79,39 @@ class DataAccess
         }
     }
 
+    public static function ReturnByGroupsJSONSearch(string $table, int $selectedGroup, int $groupSize, $whereColumn, $whereValue, $whereProperty, string $orderByColumn = null, bool $desc = true)
+    {
+        $offset = ($selectedGroup - 1) * $groupSize;
+        $order = '';
+        if($orderByColumn)
+        {
+            $order = "ORDER BY {$orderByColumn}";
+            if($desc)
+            {
+                $order .= " DESC";
+            }
+        }
+
+        try
+        {
+            $query = "SELECT * 
+            FROM $table 
+            WHERE 
+              json_extract($whereColumn, '$.$whereProperty') LIKE '%' || ? || '%' OR 
+              json_extract($whereColumn, '$.$whereProperty') = ? OR 
+              json_extract($whereColumn, '$.$whereProperty') = ?";            
+            $statement = self::$pdo->prepare($query);
+            $statement->execute([$whereValue, $whereValue, $whereValue]);
+            
+            $statement->execute();
+            return $statement->fetchAll(PDO::FETCH_ASSOC);
+        }
+        catch(Exception $e)
+        {
+            self::Catch($e);
+        }
+    }
+
     /////////////////////////////////////////////////////////////
     #region - - - [ BASIC FUNCTIONS ]
     public static function Select(string $table, string $column = null)
