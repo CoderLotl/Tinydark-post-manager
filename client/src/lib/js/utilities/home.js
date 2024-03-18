@@ -157,6 +157,7 @@ export async function GetTags()
     {
         let resp = await serverResponse.json();
         let options = resp['response'];
+        options.sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
         for(let i = 0; i < options.length; i++)
         {
             let opt = document.createElement('option');
