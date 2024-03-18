@@ -1,10 +1,14 @@
 import { navigate } from "svelte-routing";
 import { DataAccessFetch } from "../services/DataAccessFetch.js";
+import { DynamicDrawer } from "../services/DynamicDrawer.js";
+import { StorageManager } from "../services/StorageManager.js";
 import checked from '../../../assets/checked.png';
 import error from '../../../assets/error.png';
 import error_net from '../../../assets/error_net.png';
 
 let dataAccess = new DataAccessFetch();
+let dynamicDrawer = new DynamicDrawer;
+let storageManager = new StorageManager;
 
 export async function SavePostChanges(postContent, isNewPost)
 {
@@ -64,4 +68,90 @@ export function CloseDialog()
     let dialog = document.getElementById('dialog');
     dialog.style.display = '';
     dialog.close();
+}
+
+export function AddDismissDialogMechanic()
+{
+    window.addEventListener('click', ()=>
+    {            
+        let dialog = document.getElementById('dialog');
+        if(dialog.classList.contains('flex'))
+        {                
+            dialog.classList.remove('flex');                
+        }
+    });
+}
+
+export function AddGameTagsMechanic()
+{
+    let tagsInput = document.getElementById('game-editor');
+    storageManager.RemoveSS('tags');
+
+    tagsInput.addEventListener('keydown', (event)=>
+    {
+        if(event.key == ' ' && document.activeElement == tagsInput)
+        {
+            if(tagsInput.value.trim() != '')
+            {
+                let tags = JSON.parse(storageManager.ReadSS('tags')) || [];
+                let elementTags = document.getElementById('element-tags');
+                
+                if(tags.includes(tagsInput.value.trim()))
+                {                    
+                    tagsInput.classList.add('input-error');
+                    setTimeout(() =>
+                    {
+                        tagsInput.classList.remove('input-error');
+                    }, 1000);
+                }
+                else
+                {
+                    let tag = dynamicDrawer.CreateSpan(null, tagsInput.value);
+                    tag.classList = 'italic bg-slate-300 text-black rounded-xl mx-1 px-3 cursor-pointer';
+                    AddTagRemoveMechanic(tag);
+                    elementTags.appendChild(tag);
+    
+                    tags.push(tagsInput.value);
+                    storageManager.WriteSS('tags', JSON.stringify(tags));
+                    tagsInput.value = '';
+                }
+            }
+            else
+            {
+                tagsInput.value = '';
+            }
+        }
+    });
+
+    tagsInput.addEventListener('input', ()=>
+    {
+        tagsInput.value = tagsInput.value.trim();
+    });
+}
+
+function AddTagRemoveMechanic(tag)
+{
+    tag.addEventListener('click', ()=>
+    {
+        let tags = JSON.parse(storageManager.ReadSS('tags'));
+        let elementToRemove = tag.textContent;
+        tags.splice(tags.indexOf(elementToRemove), 1);
+        storageManager.WriteSS('tags', JSON.stringify(tags));
+        tag.remove();
+    });
+}
+
+export function LoadTags(tags)
+{
+    let elementTags = document.getElementById('element-tags');
+    let elements = tags.split(", ");
+    storageManager.WriteSS('tags', JSON.stringify(elements));
+
+    for(let i = 0; i < elements.length; i++)
+    {
+        let tag = dynamicDrawer.CreateSpan(null, elements[i]);
+        tag.classList = 'italic bg-slate-300 text-black rounded-xl mx-1 px-3 cursor-pointer';
+        AddTagRemoveMechanic(tag);
+        elementTags.appendChild(tag);
+    }
 }

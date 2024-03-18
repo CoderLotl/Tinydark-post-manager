@@ -2,7 +2,7 @@
     import Quill from 'quill';    
     import { onMount } from 'svelte';        
     import { GoBack } from '../js/utilities/backbtn';
-    import { SavePostChanges } from '../js/utilities/edit_post.js';
+    import { SavePostChanges, AddDismissDialogMechanic, AddGameTagsMechanic, LoadTags } from '../js/utilities/edit_post.js';
     import { StorageManager } from '../js/services/StorageManager.js';
     import Home_header from './components/Home_header.svelte';
     
@@ -24,26 +24,19 @@
                 toolbar: '#toolbar',
             }
         });
-        quill2 = new Quill('#title-editor');
-        quill3 = new Quill('#game-editor');
-        quill4 = new Quill('#url-editor');
+        quill2 = new Quill('#title-editor');        
+        quill3 = new Quill('#url-editor');
 
         if(newPost == false)
         {
             quill.root.innerHTML = postContent.content;
-            quill2.root.innerHTML = postContent.headline;
-            quill3.root.innerHTML = postContent.game;
-            quill4.root.innerHTML = postContent.url;
+            quill2.root.innerHTML = postContent.headline;            
+            quill3.root.innerHTML = postContent.url;
         }
 
-        window.addEventListener('click', ()=>
-        {            
-            let dialog = document.getElementById('dialog');
-            if(dialog.classList.contains('flex'))
-            {                
-                dialog.classList.remove('flex');                
-            }
-        });
+        AddDismissDialogMechanic();
+        AddGameTagsMechanic();
+        LoadTags(postContent.game);
     });
 
     function handleSavingPostChanges()
@@ -52,8 +45,8 @@
         {
             content: quill.root.innerHTML,
             headline: quill2.getText().trim(),
-            game: quill3.getText().trim(),
-            url: quill4.getText().trim(),
+            game: JSON.parse(storageManager.ReadSS('tags')),
+            url: quill3.getText().trim(),
             id: postContent.id
         };
         
@@ -78,7 +71,7 @@
         <legend class="text-base">
             Post Details
         </legend>
-        <div id="first-row-details" class="flex justify-between">
+        <div id="first-row-details" class="flex flex-col">
             <div class="w-3/5">
                 <label for="title-editor" class="text-lg">
                     Title
@@ -87,16 +80,6 @@
     
                 </div>
             </div>
-            <div class="w-1/5">
-                <label for="game-editor" class="text-lg">
-                    Tag
-                </label>
-                <div id="game-editor" class="editor w-full rounded-3xl pl-3 pr-0 md:pl-3 italic">
-    
-                </div>
-            </div>
-        </div>
-        <div id="second-row-details">
             <div class="w-3/5">
                 <label for="url-editor" class="text-lg">
                     URL
@@ -104,6 +87,16 @@
                 <div id="url-editor" class="editor w-full rounded-3xl px-6 italic">
     
                 </div>
+            </div>
+        </div>
+        <div id="second-row-details" class="mb-4">
+            <div class="w-3/5 flex flex-col">
+                <label for="game-editor" class="text-lg">
+                    Tag
+                </label>
+                <div id="element-tags" class="w-ful mb-2">
+                </div>
+                <input type="text" id="game-editor" class="editor w-1/2 rounded-3xl pr-0 pl-3 md:pl-3 italic">
             </div>
         </div>
     </fieldset>    

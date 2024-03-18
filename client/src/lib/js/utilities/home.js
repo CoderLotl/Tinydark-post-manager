@@ -237,9 +237,22 @@ export async function GeneratePosts()
             span1.classList = 'font-bold'
             sub1.appendChild(span1);
 
-            let tag = dynamicDrawer.CreateSpan(null, posts[i].game);            
-            tag.classList = 'italic';
-            sub1.appendChild(tag);
+            // TAGS SETTING
+            if(Array.isArray(posts[i].game))
+            {
+                for(let j = 0; j < posts[i].game.length; j++)
+                {
+                    let gameTag = dynamicDrawer.CreateSpan(null, posts[i].game[j]);
+                    gameTag.classList = 'italic bg-slate-300 text-black rounded-xl mx-1 px-3';
+                    sub1.appendChild(gameTag);
+                }
+            }
+            else
+            {                
+                let tag = dynamicDrawer.CreateSpan(null, posts[i].game);
+                tag.classList = 'italic bg-slate-300 text-black rounded-xl mx-1 px-3';
+                sub1.appendChild(tag);
+            }
 
             // SUB DETAILS 2
             let sub2 = dynamicDrawer.CreateDiv(null, null);

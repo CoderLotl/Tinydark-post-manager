@@ -3,6 +3,7 @@
 namespace Model\Services;
 
 use DateTime;
+use Model\Utilities\Log;
 use Model\Services\DataAccess;
 
 class PostManager
@@ -45,7 +46,35 @@ class PostManager
     public static function GetTags($request, $response)
     {        
         $tags = DataAccess::SelectDistinctColumn(POSTS, 'game');
-        return self::ReturnResponse($request, $response, $tags, 200);
+        $resultingTags = [];
+        $addedTags = [];
+        
+        foreach($tags as &$tag)
+        {
+            $tagContent = json_decode($tag)->tags;            
+
+            if(is_array($tagContent))
+            {
+                foreach($tagContent as $tagC)
+                {
+                    if(!in_array($tagC, $addedTags))
+                    {
+                        $addedTags[] = $tagC;
+                        $resultingTags[] = $tagC;
+                    }
+                }
+            }
+            else
+            {
+                if(!in_array($tagContent, $addedTags))
+                {
+                    $addedTags[] = $tagContent;
+                    $resultingTags[] = $tagContent;
+                }
+            }
+        }
+        
+        return self::ReturnResponse($request, $response, $resultingTags, 200);
     }
 
     /**
@@ -68,6 +97,16 @@ class PostManager
         {
             $posts = DataAccess::ReturnByGroups(POSTS, $params['page'], $params['posts_amount'], 'date');
         }
+
+        foreach($posts as &$post)
+        {            
+            $tags = json_decode($post['game']);
+            $post['game'] = [];
+            foreach($tags as $tag)
+            {
+                $post['game'] = $tag;
+            }            
+        }        
         return self::ReturnResponse($request, $response, $posts, 200);
     }
 
@@ -80,8 +119,23 @@ class PostManager
      */
     public static function ReturnPost($request, $response)
     {
-        $params = self::GetRequest($request);
-        $post_content = DataAccess::SelectWhere(POSTS, ['game', 'headline'], [$params['game'], $params['headline']]);        
+        $params = self::GetRequest($request);        
+        $post_content = DataAccess::SelectWhere(POSTS, ['id'], [$params['id']]);                
+        
+        $tags = json_decode($post_content[0]['game'])->tags;
+        $post_content[0]['game'] = '';
+        
+        foreach($tags as $tag)
+        {
+            $post_content[0]['game'] .= $tag;
+            Log::WriteLog('aaa.txt', $tag);
+            if($tag !== end($tags))
+            {                
+                $post_content[0]['game'] .= ', ';
+            }
+            Log::WriteLog('aaa.txt', json_encode($post_content[0]['game']));
+        }
+
         return self::ReturnResponse($request, $response, $post_content, 200);
     }
 
@@ -91,6 +145,8 @@ class PostManager
 
         $date = new DateTime();
         $dateString = $date->format('Y-m-d H:i:s');
+
+        $tags = '';
 
         $create = DataAccess::Insert(
             POSTS,
