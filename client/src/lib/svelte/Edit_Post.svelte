@@ -12,8 +12,7 @@
 
     let quill;
     let quill2;
-    let quill3;
-    let quill4;
+    let quill3;    
 
     onMount( ()=>
     {        
@@ -32,12 +31,19 @@
             quill.root.innerHTML = postContent.content;
             quill2.root.innerHTML = postContent.headline;            
             quill3.root.innerHTML = postContent.url;
+            LoadTags(postContent.game);
         }
 
         AddDismissDialogMechanic();
         AddGameTagsMechanic();
-        LoadTags(postContent.game);
     });
+
+    function goBack(event)
+    {
+        storageManager.RemoveSS('tags');
+        storageManager.RemoveSS('post');
+        GoBack(event);
+    }
 
     function handleSavingPostChanges()
     {
@@ -49,7 +55,7 @@
             url: quill3.getText().trim(),
             id: postContent.id
         };
-        
+        storageManager.RemoveSS('post');
         SavePostChanges(newPostContent, newPost);
     }    
 </script>
@@ -60,7 +66,7 @@
 
 <Home_header>
     <div class="flex flex-col items-center">
-        <button on:click={GoBack}>
+        <button on:click={goBack}>
             Go Back
         </button>
     </div>
