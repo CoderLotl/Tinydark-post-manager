@@ -107,7 +107,7 @@ export function AddGameTagsMechanic()
                 else
                 {
                     let tag = dynamicDrawer.CreateSpan(null, tagsInput.value);
-                    tag.classList = 'italic bg-slate-300 text-black rounded-xl mx-1 px-3 cursor-pointer';
+                    tag.classList = 'italic bg-slate-300 text-black rounded-xl mx-1 px-3 cursor-pointer mb-2';
                     AddTagRemoveMechanic(tag);
                     elementTags.appendChild(tag);
     

@@ -73,12 +73,12 @@
 </Home_header>
 
 <div class="editor-container mt-40 relative flex flex-col items-center rounded-3xl">
-    <fieldset id="details-fieldset" class="flex flex-col w-3/4 px-3 border border-solid rounded-3xl mt-6 bg-slate-800">
+    <fieldset id="details-fieldset" class="flex flex-col w-full md:w-3/4 px-3 border border-solid rounded-3xl mt-6 bg-slate-800">
         <legend class="text-base">
             Post Details
         </legend>
         <div id="first-row-details" class="flex flex-col">
-            <div class="w-3/5">
+            <div class="w-full md:w-3/5">
                 <label for="title-editor" class="text-lg">
                     Title
                 </label>
@@ -86,7 +86,7 @@
     
                 </div>
             </div>
-            <div class="w-3/5">
+            <div class="w-full md:w-3/5">
                 <label for="url-editor" class="text-lg">
                     URL
                 </label>
@@ -96,17 +96,17 @@
             </div>
         </div>
         <div id="second-row-details" class="mb-4">
-            <div class="w-3/5 flex flex-col">
+            <div class="w-full md:w-3/4 flex flex-col">
                 <label for="game-editor" class="text-lg">
                     Tag
                 </label>
-                <div id="element-tags" class="w-ful mb-2">
+                <div id="element-tags" class="flex flex-wrap w-ful mb-2">
                 </div>
-                <input type="text" placeholder="Write some tag name here" id="game-editor" class="editor w-1/2 rounded-3xl pr-0 pl-3 md:pl-3 italic">
+                <input type="text" placeholder="Write some tag name here" id="game-editor" class="editor w-3/5 md:w-1/2 rounded-3xl pr-0 pl-3 md:pl-3 italic">
             </div>
         </div>
     </fieldset>    
-    <fieldset id="post-content-fieldset" class="flex flex-col items-center w-3/4 border border-solid rounded-3xl mt-6 pl-3 pr-3 bg-slate-800">
+    <fieldset id="post-content-fieldset" class="flex flex-col items-center w-full md:w-3/4 border border-solid rounded-3xl mt-6 pl-3 pr-3 bg-slate-800">
         <legend class="text-base">
             Post content
         </legend>
