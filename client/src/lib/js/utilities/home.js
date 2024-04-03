@@ -22,39 +22,49 @@ export async function Login(event) {
     const blob = document.getElementById('slime_spinner');
     
     let payload = { user: user.value, password: password.value };
-    message.textContent = '';
-    
+    message.textContent = '';    
     blob.style.visibility = 'visible';
+    
     let serverResponse = await dataAccess.postData(`${BACK_PATH_}` + '/login', payload);
-    if (serverResponse)
-    {            
-        let resp = await serverResponse.json();
-        
-        if(serverResponse.ok)
-        {                
-            let svResponse = JSON.parse(resp['response']);
+    try
+    {
+        if (serverResponse)
+        {            
+            let resp = await serverResponse.json();
             
-            if (svResponse.hasOwnProperty('token'))
+            if(serverResponse.ok)
             {                
-                storageManager.WriteLS('user', user.value);
-                setTimeout(() => {
-                    blob.style.visibility = 'hidden';
-                    navigate('/home');
-                }, 1000);                
+                let svResponse = JSON.parse(resp['response']);
+                
+                if (svResponse.hasOwnProperty('token'))
+                {                
+                    storageManager.WriteLS('user', user.value);
+                    setTimeout(() => {
+                        blob.style.visibility = 'hidden';
+                        navigate('/home');
+                    }, 1000);                
+                }
+            }
+            else
+            {
+                blob.style.visibility = 'hidden';
+                message.textContent = 'Error: ' + resp['response'];
             }
         }
         else
         {
             blob.style.visibility = 'hidden';
-            message.textContent = 'Error: ' + resp['response'];
+            let message = 'Error contacting the server. Check your connection.';
+            console.log(serverResponse);
+            message.textContent = msg;
         }
     }
-    else
+    catch
     {
         blob.style.visibility = 'hidden';
-        let message = 'Error contacting the server. Check your connection.';
+        let msg = 'Error contacting the server. Check your connection.';
         console.log(serverResponse);
-        message.textContent = message;
+        message.textContent = msg;
     }
 }
 

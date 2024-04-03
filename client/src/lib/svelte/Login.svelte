@@ -18,9 +18,9 @@
 </svelte:head>
 
 <div id="form-login-container" class="flex flex-col justify-center items-center h-screen w-screen">
-    <form id="form-login" class="flex flex-col justify-center items-center border-solid rounded-lg border border-black md:w-1/4 md:h-1/2 overflow-auto">
-        <input id="user" type="text" placeholder="User" autocomplete="off" class="m-2">
-        <input id="password" type="password" placeholder="Password" autocomplete="off" class="m-2">
+    <form id="form-login" class="flex flex-col justify-center items-center border-solid rounded-lg border border-black md:w-1/4 md:h-1/2 min-h-min overflow-auto p-4">
+        <input id="user" type="text" placeholder="User" autocomplete="off" class="m-2 !bg-gray-900 rounded-lg !text-gray-200">
+        <input id="password" type="password" placeholder="Password" autocomplete="off" class="m-2 !bg-gray-900 rounded-lg !text-gray-200">
         <a href='/register' on:click={NavToRegister} role="button" aria-label="Navigate to another component" class="m-2">
             Register an account
         </a>
@@ -32,6 +32,6 @@
                 <img id="slime" class="pulse" src={blob} alt="a black blob with eyes" title="Tinyblob welcomes you! " style="width: 52px; height: 45px;">
             </span>
         </span>
-        <p id="message" class="h-1 italic"></p>
     </form>
+    <p id="message" class="h-1 italic"></p>
 </div>
