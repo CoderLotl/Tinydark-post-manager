@@ -4,7 +4,7 @@ import { StorageManager } from '../services/StorageManager.js';
 import { DynamicDrawer } from '../services/DynamicDrawer.js';
 import { DateFormatter } from '../services/DateFormatter.js';
 import { BACK_PATH, BASE_PATH } from "../stores/stores.js";
-import { get } from from 'svelte/store';
+import { get } from 'svelte/store';
 
 let dataAccess = new DataAccessFetch();
 let storageManager = new StorageManager();

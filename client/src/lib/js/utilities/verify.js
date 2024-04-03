@@ -1,6 +1,6 @@
 import { DataAccessFetch } from "../services/DataAccessFetch";
 import { BACK_PATH, BASE_PATH } from "../stores/stores.js";
-import { get } from from 'svelte/store';
+import { get } from 'svelte/store';
 
 let DataAccess = new DataAccessFetch();
 const currentPath = window.location.pathname;

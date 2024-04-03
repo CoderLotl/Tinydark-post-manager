@@ -3,7 +3,7 @@ import { DataAccessFetch } from "../services/DataAccessFetch.js";
 import { DynamicDrawer } from "../services/DynamicDrawer.js";
 import { StorageManager } from "../services/StorageManager.js";
 import { BACK_PATH, BASE_PATH } from "../stores/stores.js";
-import { get } from from 'svelte/store';
+import { get } from 'svelte/store';
 import checked from '../../../assets/checked.png';
 import error from '../../../assets/error.png';
 import error_net from '../../../assets/error_net.png';
