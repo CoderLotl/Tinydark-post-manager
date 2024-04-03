@@ -2,6 +2,8 @@ import { navigate } from "svelte-routing";
 import { DataAccessFetch } from "../services/DataAccessFetch.js";
 import { DynamicDrawer } from "../services/DynamicDrawer.js";
 import { StorageManager } from "../services/StorageManager.js";
+import { BACK_PATH, BASE_PATH } from "../stores/stores.js";
+import { get } from from 'svelte/store';
 import checked from '../../../assets/checked.png';
 import error from '../../../assets/error.png';
 import error_net from '../../../assets/error_net.png';
@@ -9,6 +11,7 @@ import error_net from '../../../assets/error_net.png';
 let dataAccess = new DataAccessFetch();
 let dynamicDrawer = new DynamicDrawer;
 let storageManager = new StorageManager;
+let BACK_PATH_ = get(BACK_PATH);
 
 export async function SavePostChanges(postContent, isNewPost)
 {
@@ -17,11 +20,11 @@ export async function SavePostChanges(postContent, isNewPost)
 
     if(isNewPost)
     {
-        serverResponse = await dataAccess.postData('http://localhost:8000/posts/create_posts', payload);
+        serverResponse = await dataAccess.postData(`${BACK_PATH_}` + '/posts/create_posts', payload);
     }
     else
     {
-        serverResponse = await dataAccess.putData('http://localhost:8000/posts/save_post_changes', payload);
+        serverResponse = await dataAccess.putData(`${BACK_PATH_}` + '/posts/save_post_changes', payload);
     }
 
     let server_resp = document.getElementById('server-response');

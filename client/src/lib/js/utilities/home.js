@@ -3,11 +3,14 @@ import { DataAccessFetch } from "../services/DataAccessFetch.js";
 import { StorageManager } from '../services/StorageManager.js';
 import { DynamicDrawer } from '../services/DynamicDrawer.js';
 import { DateFormatter } from '../services/DateFormatter.js';
+import { BACK_PATH, BASE_PATH } from "../stores/stores.js";
+import { get } from from 'svelte/store';
 
 let dataAccess = new DataAccessFetch();
 let storageManager = new StorageManager();
 let dynamicDrawer = new DynamicDrawer();
 let dateFormatter = new DateFormatter();
+let BACK_PATH_ = get(BACK_PATH);
 
 export async function Login(event) {
     event.preventDefault();
@@ -22,7 +25,7 @@ export async function Login(event) {
     message.textContent = '';
     
     blob.style.visibility = 'visible';
-    let serverResponse = await dataAccess.postData('http://localhost:8000/login', payload);
+    let serverResponse = await dataAccess.postData(`${BACK_PATH_}` + '/login', payload);
     if (serverResponse)
     {            
         let resp = await serverResponse.json();
@@ -57,7 +60,7 @@ export async function Login(event) {
 
 export async function Logout()
 {
-    let serverResponse = await dataAccess.postData('http://localhost:8000/logout');
+    let serverResponse = await dataAccess.postData(`${BACK_PATH_}` + '/logout');
     if(serverResponse)
     {
         storageManager.RemoveLS('user');
@@ -79,7 +82,7 @@ export async function GeneratePageButtons()
 
     let pageButtons = document.getElementById('page_buttons');
     let payload = { posts_per_page: postsPerPage, tag: tag };
-    let serverResponse = await dataAccess.getData('http://localhost:8000/posts/pages_count', payload);
+    let serverResponse = await dataAccess.getData(`${BACK_PATH_}` + '/posts/pages_count', payload);
     
     if(serverResponse)
     {
@@ -152,7 +155,7 @@ export async function GetTags()
         defaultOption.selected = true;
     }
 
-    let serverResponse = await dataAccess.getData('http://localhost:8000/posts/get_tags');
+    let serverResponse = await dataAccess.getData(`${BACK_PATH_}` + '/posts/get_tags');
     if(serverResponse)
     {
         let resp = await serverResponse.json();
@@ -313,7 +316,7 @@ export async function GeneratePosts()
 export async function GetPosts(page, amount, tag)
 {
     let payload = {page: page, posts_amount: amount, tag: tag}
-    let serverResponse = await dataAccess.getData('http://localhost:8000/posts/posts_content', payload);
+    let serverResponse = await dataAccess.getData(`${BACK_PATH_}` + '/posts/posts_content', payload);
     if(serverResponse)
     {
         let resp = await serverResponse.json();        
@@ -330,7 +333,7 @@ export async function GetPosts(page, amount, tag)
 async function GetPostContent(postContainer)
 {    
     let params = JSON.parse(postContainer.getAttribute('post-attributes'));
-    let serverResponse = await dataAccess.getData('http://localhost:8000/posts/post', params);
+    let serverResponse = await dataAccess.getData(`${BACK_PATH_}` + '/posts/post', params);
     if(serverResponse)
     {
         let resp = await serverResponse.json();        
@@ -411,7 +414,7 @@ export async function ConfirmDeleteDialog()
     let payload = {id: id};
     if(id)
     {
-        let serverResponse = await dataAccess.deleteData('http://localhost:8000/posts/delete_post', payload);
+        let serverResponse = await dataAccess.deleteData(`${BACK_PATH_}` + '/posts/delete_post', payload);
         if(serverResponse.ok)
         {
             GeneratePageButtons();

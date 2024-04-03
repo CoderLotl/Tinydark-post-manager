@@ -1,6 +1,9 @@
 import { DataAccessFetch } from "../services/DataAccessFetch.js";
+import { BACK_PATH, BASE_PATH } from "../stores/stores.js";
+import { get } from from 'svelte/store';
 
 let dataAccess = new DataAccessFetch();
+let BACK_PATH_ = get(BACK_PATH);
 
 export function Register(event)
 {
@@ -22,7 +25,7 @@ export function Register(event)
     {
         (async () =>
         {
-            let serverResponse = await dataAccess.postData('http://localhost:8000/register/submit', payload);
+            let serverResponse = await dataAccess.postData(`${BACK_PATH_}` + '/register/submit', payload);
             
             if(serverResponse)
             {                
