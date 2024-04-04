@@ -1,6 +1,6 @@
 <script>
     import { navigate } from 'svelte-routing';
-    import { BASE_PATH } from "../stores/stores.js";
+    import { BASE_PATH } from "../js/stores/stores.js";
     import { get } from 'svelte/store';
     import { onMount } from 'svelte';
     import { GoBack } from '../js/utilities/utilities.js';
