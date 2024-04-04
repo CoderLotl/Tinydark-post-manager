@@ -7,7 +7,6 @@
   import { writable, get } from 'svelte/store';
 
   // COMPONENTS
-  import Landing from './lib/svelte/Landing.svelte';
   import Login from './lib/svelte/Login.svelte';
   import Home from './lib/svelte/Home.svelte';
   import Edit_Post from './lib/svelte/Edit_Post.svelte';
@@ -31,8 +30,7 @@
   let BASE_PATH_ = get(BASE_PATH);  
 
   const routes = [
-    { path: `${BASE_PATH_}/`, component: Landing },
-    { path: `${BASE_PATH_}/login`, component: Login },
+    { path: `${BASE_PATH_}/`, component: Login },
     { path: `${BASE_PATH_}/home`, component: Home },
     { path: `${BASE_PATH_}/edit_post`, component: Edit_Post},
     { path: `${BASE_PATH_}/register`, component: Register },

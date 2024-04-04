@@ -1,5 +1,7 @@
 <script>    
     import { navigate } from 'svelte-routing';
+    import { BASE_PATH } from "../stores/stores.js";
+    import { get } from 'svelte/store';
     import { Login } from '../js/utilities/home.js';
 
     import blob from '../../assets/2022_sm_002.png';
@@ -8,8 +10,9 @@
 
     function NavToRegister(event)
     {
+        let BASE_PATH_ = get(BASE_PATH);
         event.preventDefault();
-        navigate('/register');
+        navigate(`${BASE_PATH_}` + '/register');
     }
 </script>
 

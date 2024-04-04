@@ -11,10 +11,11 @@ import error_net from '../../../assets/error_net.png';
 let dataAccess = new DataAccessFetch();
 let dynamicDrawer = new DynamicDrawer;
 let storageManager = new StorageManager;
-let BACK_PATH_ = get(BACK_PATH);
 
 export async function SavePostChanges(postContent, isNewPost)
 {
+    let BACK_PATH_ = get(BACK_PATH);
+    let BASE_PATH_ = get(BASE_PATH);
     let payload = postContent;
     let serverResponse;
 
@@ -46,8 +47,9 @@ export async function SavePostChanges(postContent, isNewPost)
             server_resp.src = checked;
             server_resp.style.backgroundColor = '#a8ccb2';
             server_msg.textContent = `${msg} Returning...`;
-            setTimeout(() => {
-                navigate('/home');
+            setTimeout(() =>
+            {
+                navigate(`${BASE_PATH_}` + '/home');
             }, 2000);
         }
         else

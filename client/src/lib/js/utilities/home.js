@@ -10,11 +10,12 @@ let dataAccess = new DataAccessFetch();
 let storageManager = new StorageManager();
 let dynamicDrawer = new DynamicDrawer();
 let dateFormatter = new DateFormatter();
-let BACK_PATH_ = get(BACK_PATH);
 
 export async function Login(event)
 {
     event.preventDefault();
+    let BACK_PATH_ = get(BACK_PATH);
+    let BASE_PATH_ = get(BASE_PATH);
 
     const user = document.getElementById('user');    
     const password = document.getElementById('password');    
@@ -26,9 +27,11 @@ export async function Login(event)
     message.textContent = '';    
     blob.style.visibility = 'visible';
     
-    let serverResponse = await dataAccess.postData(`${BACK_PATH_}` + '/login', payload);
+    console.log(`${BACK_PATH_}` + '/login');
+    let serverResponse;
     try
     {
+        serverResponse = await dataAccess.postData(`${BACK_PATH_}` + '/login', payload);
         if(serverResponse)
         {            
             let resp = await serverResponse.json();
@@ -42,7 +45,7 @@ export async function Login(event)
                     storageManager.WriteLS('user', user.value);
                     setTimeout(() => {
                         blob.style.visibility = 'hidden';
-                        navigate('/home');
+                        navigate(`${BASE_PATH_}` + '/home');
                     }, 1000);                
                 }
             }
@@ -63,19 +66,20 @@ export async function Login(event)
     catch
     {
         blob.style.visibility = 'hidden';
-        let msg = 'Error contacting the server. Check your connection.';
-        console.log(serverResponse);
+        let msg = 'Error contacting the server. Check your connection.';        
         message.textContent = msg;
     }
 }
 
 export async function Logout()
 {
+    let BACK_PATH_ = get(BACK_PATH);
+    let BASE_PATH_ = get(BASE_PATH);
     let serverResponse = await dataAccess.postData(`${BACK_PATH_}` + '/logout');
     if(serverResponse)
     {
         storageManager.RemoveLS('user');
-        navigate('/');
+        navigate(`${BASE_PATH_}` + '/');
     }
     else
     {
@@ -87,6 +91,7 @@ export async function Logout()
 
 export async function GeneratePageButtons()
 {
+    let BACK_PATH_ = get(BACK_PATH);
     let page = storageManager.ReadSS('currentPage') || 1;
     let postsPerPage = storageManager.ReadSS('posts-per-page') || 5;
     let tag = storageManager.ReadSS('currentTag') || 'All';
@@ -153,6 +158,7 @@ function AddPaginationMechanic(btn)
 
 export async function GetTags()
 {
+    let BACK_PATH_ = get(BACK_PATH);
     let tagsSelect = document.getElementById('tags');
     let selectedTag = storageManager.ReadSS('currentTag') || null;
     
@@ -326,6 +332,7 @@ export async function GeneratePosts()
 
 export async function GetPosts(page, amount, tag)
 {
+    let BACK_PATH_ = get(BACK_PATH);
     let payload = {page: page, posts_amount: amount, tag: tag}
     let serverResponse = await dataAccess.getData(`${BACK_PATH_}` + '/posts/posts_content', payload);
     if(serverResponse)
@@ -343,6 +350,7 @@ export async function GetPosts(page, amount, tag)
  */
 async function GetPostContent(postContainer)
 {    
+    let BACK_PATH_ = get(BACK_PATH);
     let params = JSON.parse(postContainer.getAttribute('post-attributes'));
     let serverResponse = await dataAccess.getData(`${BACK_PATH_}` + '/posts/post', params);
     if(serverResponse)
@@ -376,10 +384,11 @@ async function AddEditBtnMechanic(btn, postContainer)
 {
     btn.addEventListener('click', async ()=>
     {
+        let BASE_PATH_ = get(BASE_PATH);
         let postContent = await GetPostContent(postContainer);
         storageManager.WriteSS('post',JSON.stringify(postContent));
         storageManager.WriteSS('createPost', false);
-        navigate('/edit_post');
+        navigate(`${BASE_PATH_}` + '/edit_post');
     });
 }
 
@@ -397,12 +406,13 @@ async function AddDeleteBtnMechanic(btn, postContainer)
 
 export function EditPost()
 {
+    let BASE_PATH_ = get(BASE_PATH);
     let dialogContent = document.getElementById('dialogContent');
     let postAttributes = JSON.parse(dialogContent.getAttribute('post-attributes'));
     postAttributes.content = dialogContent.innerHTML;
     storageManager.WriteSS('post',JSON.stringify(postAttributes));
     storageManager.WriteSS('createPost', false);
-    navigate('/edit_post');
+    navigate(`${BASE_PATH_}` + '/edit_post');
 }
 
 export function CloseDialog()
@@ -421,6 +431,7 @@ export function CloseDeleteDialog()
 
 export async function ConfirmDeleteDialog()
 {
+    let BACK_PATH_ = get(BACK_PATH);
     let id = storageManager.ReadSS('delete-post');
     let payload = {id: id};
     if(id)
@@ -457,8 +468,9 @@ export function SetTags(event)
 
 export function CreatePost()
 {
+    let BASE_PATH_ = get(BASE_PATH);
     storageManager.WriteSS('createPost', true);
-    navigate('/edit_post');
+    navigate(`${BASE_PATH_}` + '/edit_post');
 }
 
 // ------------------------------------

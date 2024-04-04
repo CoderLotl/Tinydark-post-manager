@@ -3,12 +3,22 @@
 // [ INIT ] ****************************
 
 // CORS
-header('Access-Control-Allow-Origin: *');
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    header('Access-Control-Allow-Origin: http://localhost:5173');
+    header('Access-Control-Allow-Headers: *');
+    header('Access-Control-Allow-Methods: *');
+    header('Access-Control-Allow-Credentials: true');
+    header('Content-Type: application/json; charset=UTF-8');
+    header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+    exit; // Stop further execution
+}
+
+header('Access-Control-Allow-Origin: http://localhost:5173');
 header('Access-Control-Allow-Headers: *');
 header('Access-Control-Allow-Methods: *');
 header('Access-Control-Allow-Credentials: true');
 header('Content-Type: application/json; charset=UTF-8');
-//header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
 // Error Handling
 error_reporting(-1);
@@ -67,7 +77,7 @@ $app->get('/test', function (Request $request, Response $response)
  * The landing page.
  */
 
-//$app->get('[/]', \Model\Services\Manager::class . '::ReturnToFront')->add(\Model\Middlewares\Wards::class . '::AlreadyLoggedLogin');
+$app->get('[/]', \Model\Services\Manager::class . '::ReturnToFront')->add(\Model\Middlewares\Wards::class . '::AlreadyLoggedLogin');
 
 #endregion
 
@@ -78,9 +88,9 @@ $app->get('/test', function (Request $request, Response $response)
  * All the routes that lead to pages.
  */
 
- //$app->get('/home', \Model\Services\Manager::class . '::ReturnToFront')->add(\Model\Middlewares\Wards::class . '::Auth');
+ $app->get('/home', \Model\Services\Manager::class . '::ReturnToFront')->add(\Model\Middlewares\Wards::class . '::Auth');
 
- //$app->get('/edit_post', \Model\Services\Manager::class . '::ReturnToFront')->add(\Model\Middlewares\Wards::class . '::Auth');
+ $app->get('/edit_post', \Model\Services\Manager::class . '::ReturnToFront')->add(\Model\Middlewares\Wards::class . '::Auth');
 
 #endregion
 
@@ -95,7 +105,7 @@ $app->post('/login', \Model\Services\Manager::class . '::Login');
 
 $app->post('/logout', \Model\Services\Manager::class . '::Logout');
 
-$app->post('/check_logged_in', \Model\Middlewares\Wards::class . '::Auth');
+$app->post('/check_logged_in', \Model\Middlewares\Wards::class . '::IsAllowed');
 
 $app->post('/register/submit', \Model\Services\Manager::class . '::Register');
 
@@ -109,11 +119,11 @@ $app->get('/posts/post', \Model\Services\PostManager::class . '::ReturnPost');
 
 $app->get('/posts/get_tags', \Model\Services\PostManager::class . '::GetTags');
 
-$app->post('/posts/create_posts', \Model\Services\PostManager::class . '::CreatePost')->add(\Model\Middlewares\Wards::class . '::Auth');
+$app->post('/posts/create_posts', \Model\Services\PostManager::class . '::CreatePost')->add(\Model\Middlewares\Wards::class . '::IsAllowed');
 
-$app->put('/posts/save_post_changes', \Model\Services\PostManager::class . '::SavePostChanges')->add(\Model\Middlewares\Wards::class . '::Auth');
+$app->put('/posts/save_post_changes', \Model\Services\PostManager::class . '::SavePostChanges')->add(\Model\Middlewares\Wards::class . '::IsAllowed');
 
-$app->delete('/posts/delete_post', \Model\Services\PostManager::class . '::DeletePost')->add(\Model\Middlewares\Wards::class . '::Auth');
+$app->delete('/posts/delete_post', \Model\Services\PostManager::class . '::DeletePost')->add(\Model\Middlewares\Wards::class . '::IsAllowed');
 
 #endregion
 
