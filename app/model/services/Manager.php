@@ -68,20 +68,6 @@ class Manager
         return $response->withHeader('Set-Cookie',
         "token=deleted; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly; Secure; SameSite=Strict"); 
     }
-
-    // /**
-    //  * Returns if the secure token cookie exists on the client side and the username stored inside.
-    //  */
-    public static function CheckIfLoggedIn($request, $response)
-    {
-        $cookies = $request->getCookieParams();
-        if(isset($cookies['token']))
-        {
-        $data = AuthJWT::GetData($cookies['token']);
-        return self::ReturnResponse($request, $response, $data, 200);
-    }
-        return self::ReturnResponse($request, $response, '', 400);
-    }
     
     public static function Register($request, $response)
     {

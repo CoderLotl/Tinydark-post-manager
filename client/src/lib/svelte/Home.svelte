@@ -5,7 +5,7 @@
         SetPostsPerPage, GeneratePageButtons, GeneratePosts, CloseDialog,
         CloseDeleteDialog, EditPost, ConfirmDeleteDialog, GetTags, SetPosts,
         SetTags, CreatePost
-    } from '../js/utilities/home';    
+    } from '../js/utilities/home.js';
     import Home_header from './components/Home_header.svelte';
     import blob from '../../assets/2022_sm_002.png';
     import compose from '../../assets/compose.png';

@@ -12,7 +12,8 @@ let dynamicDrawer = new DynamicDrawer();
 let dateFormatter = new DateFormatter();
 let BACK_PATH_ = get(BACK_PATH);
 
-export async function Login(event) {
+export async function Login(event)
+{
     event.preventDefault();
 
     const user = document.getElementById('user');    
@@ -28,7 +29,7 @@ export async function Login(event) {
     let serverResponse = await dataAccess.postData(`${BACK_PATH_}` + '/login', payload);
     try
     {
-        if (serverResponse)
+        if(serverResponse)
         {            
             let resp = await serverResponse.json();
             

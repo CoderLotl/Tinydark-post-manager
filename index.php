@@ -95,7 +95,7 @@ $app->post('/login', \Model\Services\Manager::class . '::Login');
 
 $app->post('/logout', \Model\Services\Manager::class . '::Logout');
 
-$app->post('/check_logged_in', \Model\Services\Manager::class . '::CheckIfLoggedIn');
+$app->post('/check_logged_in', \Model\Middlewares\Wards::class . '::Auth');
 
 $app->post('/register/submit', \Model\Services\Manager::class . '::Register');
 
@@ -109,11 +109,11 @@ $app->get('/posts/post', \Model\Services\PostManager::class . '::ReturnPost');
 
 $app->get('/posts/get_tags', \Model\Services\PostManager::class . '::GetTags');
 
-$app->post('/posts/create_posts', \Model\Services\PostManager::class . '::CreatePost')->add(\Model\Middlewares\Wards::class . '::IsAllowed');
+$app->post('/posts/create_posts', \Model\Services\PostManager::class . '::CreatePost')->add(\Model\Middlewares\Wards::class . '::Auth');
 
-$app->put('/posts/save_post_changes', \Model\Services\PostManager::class . '::SavePostChanges')->add(\Model\Middlewares\Wards::class . '::IsAllowed');
+$app->put('/posts/save_post_changes', \Model\Services\PostManager::class . '::SavePostChanges')->add(\Model\Middlewares\Wards::class . '::Auth');
 
-$app->delete('/posts/delete_post', \Model\Services\PostManager::class . '::DeletePost')->add(\Model\Middlewares\Wards::class . '::IsAllowed');
+$app->delete('/posts/delete_post', \Model\Services\PostManager::class . '::DeletePost')->add(\Model\Middlewares\Wards::class . '::Auth');
 
 #endregion
 
