@@ -16,7 +16,7 @@
 
 <script>
     import { onMount } from 'svelte';
-    import { GoBack } from '../js/utilities/backbtn';
+    import { GoBack } from '../js/utilities/utilities.js';
     import { Register } from '../js/utilities/register';
 
     onMount(() =>

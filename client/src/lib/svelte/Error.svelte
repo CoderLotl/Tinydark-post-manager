@@ -1,7 +1,7 @@
 <script>
     import { navigate } from 'svelte-routing';    
     import { onMount } from 'svelte';
-    import { GoBack } from '../js/utilities/backbtn';
+    import { GoBack } from '../js/utilities/utilities.js';
 
     import sadFrog from '../../assets/sad-frog.jpg';
 

@@ -1,7 +1,7 @@
 <script>
     import { onMount } from 'svelte';
     import { Verify } from '../js/utilities/verify';
-    import { GoBack } from '../js/utilities/backbtn';
+    import { GoBack } from '../js/utilities/utilities.js';
     import '../js/utilities/verify.js';
 
     onMount(() => {

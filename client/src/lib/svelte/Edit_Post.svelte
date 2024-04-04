@@ -1,7 +1,7 @@
 <script>
     import Quill from 'quill';    
     import { onMount } from 'svelte';        
-    import { GoBack } from '../js/utilities/backbtn';
+    import { GoBack } from '../js/utilities/utilities.js';
     import { SavePostChanges, AddDismissDialogMechanic, AddGameTagsMechanic, LoadTags } from '../js/utilities/edit_post.js';
     import { StorageManager } from '../js/services/StorageManager.js';
     import Home_header from './components/Home_header.svelte';

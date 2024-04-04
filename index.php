@@ -67,7 +67,7 @@ $app->get('/test', function (Request $request, Response $response)
  * The landing page.
  */
 
-$app->get('[/]', \Model\Services\Manager::class . '::ReturnToFront')->add(\Model\Middlewares\Wards::class . '::AlreadyLoggedLogin');
+//$app->get('[/]', \Model\Services\Manager::class . '::ReturnToFront')->add(\Model\Middlewares\Wards::class . '::AlreadyLoggedLogin');
 
 #endregion
 
@@ -78,9 +78,9 @@ $app->get('[/]', \Model\Services\Manager::class . '::ReturnToFront')->add(\Model
  * All the routes that lead to pages.
  */
 
- $app->get('/home', \Model\Services\Manager::class . '::ReturnToFront')->add(\Model\Middlewares\Wards::class . '::Auth');
+ //$app->get('/home', \Model\Services\Manager::class . '::ReturnToFront')->add(\Model\Middlewares\Wards::class . '::Auth');
 
- $app->get('/edit_post', \Model\Services\Manager::class . '::ReturnToFront')->add(\Model\Middlewares\Wards::class . '::Auth');
+ //$app->get('/edit_post', \Model\Services\Manager::class . '::ReturnToFront')->add(\Model\Middlewares\Wards::class . '::Auth');
 
 #endregion
 
