@@ -19,7 +19,7 @@
   if(isDev == 'development')
   {
     BASE_PATH.set('/client/dist');
-    BACK_PATH.set('http://localhost:80'); // << - - - SET YOUR DEV URL HERE
+    BACK_PATH.set('http://localhost'); // << - - - SET YOUR DEV URL HERE
     console.log('on dev');
   }
   else
