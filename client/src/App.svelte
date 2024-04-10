@@ -19,18 +19,15 @@
   if(isDev == 'development')
   {
     BASE_PATH.set('/client/dist');
-    BACK_PATH.set('http://localhost'); // << - - - SET YOUR DEV URL HERE
-    console.log('on dev');
+    BACK_PATH.set('http://localhost'); // << - - - SET YOUR DEV URL HERE    
   }
   else
   {
     BASE_PATH.set('');
-    BACK_PATH.set(window.location.origin); // << - - - SET YOUR PROD URL HERE
-    console.log('not on dev');
+    BACK_PATH.set(window.location.origin); // << - - - SET YOUR PROD URL HERE    
   }
   
-  let BASE_PATH_ = get(BASE_PATH);
-  console.log(BASE_PATH_);
+  let BASE_PATH_ = get(BASE_PATH);  
 
   const routes = [
     { path: `${BASE_PATH_}/`, component: Login },

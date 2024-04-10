@@ -120,19 +120,10 @@ class PostManager
     public static function ReturnPost($request, $response)
     {
         $params = self::GetRequest($request);        
-        $post_content = DataAccess::SelectWhere(POSTS, ['id'], [$params['id']]);                
+        $post_content = DataAccess::SelectWhere(POSTS, ['id'], [$params['id']]);        
         
         $tags = json_decode($post_content[0]['game'])->tags;
-        $post_content[0]['game'] = '';
-        
-        foreach($tags as $tag)
-        {
-            $post_content[0]['game'] .= $tag;            
-            if($tag !== end($tags))
-            {                
-                $post_content[0]['game'] .= ', ';
-            }            
-        }
+        $post_content[0]['game'] = $tags;
 
         return self::ReturnResponse($request, $response, $post_content, 200);
     }

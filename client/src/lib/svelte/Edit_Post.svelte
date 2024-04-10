@@ -8,7 +8,8 @@
     
     let storageManager = new StorageManager();
     let postContent = JSON.parse(storageManager.ReadSS('post'));
-    let newPost = storageManager.ReadSS('createPost') == 'false' ? false : true;    
+    let newPost = storageManager.ReadSS('createPost') == 'false' ? false : true;
+    storageManager.RemoveSS('tags');
 
     let quill;
     let quill2;

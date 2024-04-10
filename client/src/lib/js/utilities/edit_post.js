@@ -87,16 +87,18 @@ export function AddDismissDialogMechanic()
     });
 }
 
+/**
+ * 
+ */
 export function AddGameTagsMechanic()
 {
-    let tagsInput = document.getElementById('game-editor');
-    storageManager.RemoveSS('tags');
+    let tagsInput = document.getElementById('game-editor');    
 
-    tagsInput.addEventListener('keydown', (event)=>
+    tagsInput.addEventListener('keydown', (event)=> // TAG INPUT MECHANIC
     {
-        if(event.key == ' ' && document.activeElement == tagsInput)
+        if(event.key == ' ' && document.activeElement == tagsInput) // If the key pressed is SPACE and the selected element is the input ...
         {
-            if(tagsInput.value.trim() != '')
+            if(tagsInput.value.trim() != '') // ... if the input ain't blank ...
             {
                 let tags = JSON.parse(storageManager.ReadSS('tags')) || [];
                 let elementTags = document.getElementById('element-tags');
@@ -149,12 +151,22 @@ function AddTagRemoveMechanic(tag)
 export function LoadTags(tags)
 {
     let elementTags = document.getElementById('element-tags');
-    let elements = tags.split(", ");
+    let elements = tags;
     storageManager.WriteSS('tags', JSON.stringify(elements));
 
-    for(let i = 0; i < elements.length; i++)
+    if(Array.isArray(tags))
     {
-        let tag = dynamicDrawer.CreateSpan(null, elements[i]);
+        for(let i = 0; i < elements.length; i++)
+        {
+            let tag = dynamicDrawer.CreateSpan(null, elements[i]);
+            tag.classList = 'italic bg-slate-300 text-black rounded-xl mx-1 px-3 cursor-pointer';
+            AddTagRemoveMechanic(tag);
+            elementTags.appendChild(tag);
+        }
+    }
+    else
+    {
+        let tag = dynamicDrawer.CreateSpan(null, elements);
         tag.classList = 'italic bg-slate-300 text-black rounded-xl mx-1 px-3 cursor-pointer';
         AddTagRemoveMechanic(tag);
         elementTags.appendChild(tag);

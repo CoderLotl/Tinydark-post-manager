@@ -352,12 +352,15 @@ async function GetPostContent(postContainer)
 {    
     let BACK_PATH_ = get(BACK_PATH);
     let params = JSON.parse(postContainer.getAttribute('post-attributes'));
-    let serverResponse = await dataAccess.getData(`${BACK_PATH_}` + '/posts/post', params);
+    
+    let serverResponse = await dataAccess.getData(`${BACK_PATH_}` + '/posts/post', params);    
     if(serverResponse)
     {
+        console.log(serverResponse);
         let resp = await serverResponse.json();        
         return resp['response'][0];
     }
+    
     return false;
 }
 
@@ -366,7 +369,7 @@ async function GetPostContent(postContainer)
 function AddPreviewBtnMechanic(btn, postContainer)
 {
     btn.addEventListener('click', async ()=>
-    {
+    {        
         let post = await GetPostContent(postContainer);
         let dialogContent = document.getElementById('dialogContent');
         let dialogTitle = document.getElementById('dialog-title');
