@@ -25,7 +25,7 @@
   else
   {
     BASE_PATH.set('');
-    BACK_PATH.set('http://localhost:80'); // << - - - SET YOUR PROD URL HERE
+    BACK_PATH.set(window.location.origin); // << - - - SET YOUR PROD URL HERE
     console.log('not on dev');
   }
   
