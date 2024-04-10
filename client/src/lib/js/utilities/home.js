@@ -25,9 +25,8 @@ export async function Login(event)
     
     let payload = { user: user.value, password: password.value };
     message.textContent = '';    
-    blob.style.visibility = 'visible';
+    blob.style.visibility = 'visible';    
     
-    console.log(`${BACK_PATH_}` + '/login');
     let serverResponse;
     try
     {
@@ -355,8 +354,7 @@ async function GetPostContent(postContainer)
     
     let serverResponse = await dataAccess.getData(`${BACK_PATH_}` + '/posts/post', params);    
     if(serverResponse)
-    {
-        console.log(serverResponse);
+    {        
         let resp = await serverResponse.json();        
         return resp['response'][0];
     }

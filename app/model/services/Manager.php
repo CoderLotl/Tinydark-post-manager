@@ -51,7 +51,7 @@ class Manager
 
             $response->getBody()->write(json_encode(['response' => $payload]));
             return $response->withHeader('Set-Cookie',
-            "token=$jwt; Path=/; Expires=" . gmdate('D, d M Y H:i:s T', $expireTime) . "; HttpOnly; Secure; SameSite=Strict");
+            "token=$jwt; Path=/; Expires=" . gmdate('D, d M Y H:i:s T', $expireTime) . "; HttpOnly; Secure; SameSite=None");
             
         }
         catch(Exception $e)
@@ -66,7 +66,7 @@ class Manager
     public static function Logout($request, $response)
     {        
         return $response->withHeader('Set-Cookie',
-        "token=deleted; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly; Secure; SameSite=Strict"); 
+        "token=deleted; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly; Secure; SameSite=None"); 
     }
     
     public static function Register($request, $response)

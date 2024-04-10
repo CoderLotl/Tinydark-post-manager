@@ -5,20 +5,23 @@
 // CORS
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     header('Access-Control-Allow-Origin: http://localhost:5173');
-    header('Access-Control-Allow-Headers: *');
-    header('Access-Control-Allow-Methods: *');
+    header('Access-Control-Allow-Methods: PUT, DELETE'); // Specify allowed methods
     header('Access-Control-Allow-Credentials: true');
-    header('Content-Type: application/json; charset=UTF-8');
-    header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+    
+    // Check if the request includes additional headers and include them in the response
+    if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS'])) {
+        header('Access-Control-Allow-Headers: ' . $_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']);
+    }
+
     exit; // Stop further execution
 }
 
+// For regular requests
 header('Access-Control-Allow-Origin: http://localhost:5173');
 header('Access-Control-Allow-Headers: *');
 header('Access-Control-Allow-Methods: *');
 header('Access-Control-Allow-Credentials: true');
 header('Content-Type: application/json; charset=UTF-8');
-header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
 // Error Handling
 error_reporting(-1);

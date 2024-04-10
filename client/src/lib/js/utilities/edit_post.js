@@ -17,7 +17,7 @@ export async function SavePostChanges(postContent, isNewPost)
     let BACK_PATH_ = get(BACK_PATH);
     let BASE_PATH_ = get(BASE_PATH);
     let payload = postContent;
-    let serverResponse;
+    let serverResponse;    
 
     if(isNewPost)
     {
@@ -154,21 +154,11 @@ export function LoadTags(tags)
     let elements = tags;
     storageManager.WriteSS('tags', JSON.stringify(elements));
 
-    if(Array.isArray(tags))
+    for(let i = 0; i < elements.length; i++)
     {
-        for(let i = 0; i < elements.length; i++)
-        {
-            let tag = dynamicDrawer.CreateSpan(null, elements[i]);
-            tag.classList = 'italic bg-slate-300 text-black rounded-xl mx-1 px-3 cursor-pointer';
-            AddTagRemoveMechanic(tag);
-            elementTags.appendChild(tag);
-        }
-    }
-    else
-    {
-        let tag = dynamicDrawer.CreateSpan(null, elements);
+        let tag = dynamicDrawer.CreateSpan(null, elements[i]);
         tag.classList = 'italic bg-slate-300 text-black rounded-xl mx-1 px-3 cursor-pointer';
         AddTagRemoveMechanic(tag);
         elementTags.appendChild(tag);
-    }
+    }    
 }

@@ -3,6 +3,7 @@
 namespace Model\Middlewares;
 use Model\Services\AuthJWT;
 use Model\Utilities\Log;
+use Slim\Psr7\Response;
 use Slim\Routing\RouteContext;
 
 class Wards
@@ -55,18 +56,21 @@ class Wards
 
     public static function IsAllowed($request, $handler)
     {
-        $cookies = $request->getCookieParams();
+        $cookies = $request->getCookieParams();        
         if(isset($cookies['token']))
-        {
+        {            
             $token = $cookies['token'];
             if(AuthJWT::VerifyToken($token, $request, $handler) == true)
             {
                 return $handler->handle($request);
             }
+
+            $response = new Response();
+            return $response->withStatus(401);
         }
         else
         {
-            $response = $handler->handle($request);
+            $response = new Response();
             return $response->withStatus(401);
         }
     }

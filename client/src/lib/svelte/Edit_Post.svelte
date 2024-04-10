@@ -48,14 +48,29 @@
 
     function handleSavingPostChanges()
     {
-        let newPostContent =
+        let newPostContent;
+
+        if(postContent != null)
         {
-            content: quill.root.innerHTML,
-            headline: quill2.getText().trim(),
-            game: JSON.parse(storageManager.ReadSS('tags')),
-            url: quill3.getText().trim(),
-            id: postContent.id
-        };
+            newPostContent =
+            {
+                content: quill.root.innerHTML,
+                headline: quill2.getText().trim(),
+                game: JSON.parse(storageManager.ReadSS('tags')),
+                url: quill3.getText().trim(),
+                id: postContent.id
+            };
+        }
+        else
+        {
+            newPostContent =
+            {
+                content: quill.root.innerHTML,
+                headline: quill2.getText().trim(),
+                game: JSON.parse(storageManager.ReadSS('tags')),
+                url: quill3.getText().trim(),                
+            };
+        }
         storageManager.RemoveSS('post');
         SavePostChanges(newPostContent, newPost);
     }    
