@@ -63,7 +63,7 @@ $app->addBodyParsingMiddleware();
 
 $app->get('/test', function (Request $request, Response $response)
 {
-    Log::WriteLog('test.txt', 'a');
+    //Log::WriteLog('test.txt', 'a');
     $payload = json_encode(array('method' => 'GET', 'msg' => "GET /test working (.htacces file is present)."));
     $response->getBody()->write($payload);
     return $response->withHeader('Content-Type', 'application/json');    
@@ -88,9 +88,9 @@ $app->get('[/]', \Model\Services\Manager::class . '::ReturnToFront')->add(\Model
  * All the routes that lead to pages.
  */
 
- $app->get('/home', \Model\Services\Manager::class . '::ReturnToFront')->add(\Model\Middlewares\Wards::class . '::Auth');
+$app->get('/home', \Model\Services\Manager::class . '::ReturnToFront')->add(\Model\Middlewares\Wards::class . '::Auth');
 
- $app->get('/edit_post', \Model\Services\Manager::class . '::ReturnToFront')->add(\Model\Middlewares\Wards::class . '::Auth');
+$app->get('/edit_post', \Model\Services\Manager::class . '::ReturnToFront')->add(\Model\Middlewares\Wards::class . '::Auth');
 
 #endregion
 

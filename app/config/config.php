@@ -12,6 +12,7 @@ if(!file_exists('./app/errors'))
 define('APP_ROOT', dirname(dirname(__FILE__)));
 define('DB', APP_ROOT . '/db/db.sqlite');
 define('ERRORS', APP_ROOT . '/errors');
+define('GMT', '+3'); // << - - - SET YOUR TIMEZONE HERE
 
 DataAccess::$pdo = new PDO('sqlite:' . DB);
 DataAccess::$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

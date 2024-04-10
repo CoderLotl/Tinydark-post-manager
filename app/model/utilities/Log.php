@@ -16,6 +16,8 @@ class Log
      */
     public static function WriteLog(string $path, $content)
     {
+        date_default_timezone_set('Etc/GMT' . GMT);
+
         $file = fopen(ERRORS . '/' . $path, 'a+');
         fwrite($file, $content . " ||| TIME: " . date("Y-m-d h:i:sa") . "\n");
         fclose($file);

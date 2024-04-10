@@ -14,6 +14,7 @@
         event.preventDefault();
         navigate(`${BASE_PATH_}` + '/register');
     }
+    console.log('login');
 </script>
 
 <svelte:head>
