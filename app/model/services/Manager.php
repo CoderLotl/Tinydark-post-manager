@@ -95,7 +95,7 @@ class Manager
             $vlink = CodeGenerator::RandomAlphaNumCode(10);
             if(!DataAccess::SelectWhere(USERS, ['vlink'], [$vlink]))
             {
-                $validVlink == true;
+                $validVlink = true;
             }
         }while($validVlink == false);
         

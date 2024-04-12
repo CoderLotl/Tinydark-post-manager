@@ -76,7 +76,7 @@ function ValidateFields(user, mail, password, response)
     }
     if(errors[2] === false)
     {
-        errorList.appendChild(document.createElement('li')).textContent = "Error: password can't be blank nor only white spaces.";
+        errorList.appendChild(document.createElement('li')).textContent = "Error: password can't be blank nor only white spaces. It also must be 6 characters or longer.";
     }
 
     return errors.every(error => error);
