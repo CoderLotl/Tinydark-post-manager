@@ -22,11 +22,19 @@
 
 <div id="form-login-container" class="flex flex-col justify-center items-center h-screen w-screen">
     <form id="form-login" class="flex flex-col justify-center items-center border-solid rounded-lg border border-black md:w-1/4 md:h-1/2 min-h-min overflow-auto p-4">
-        <input id="user" type="text" placeholder="User" autocomplete="off" class="m-2 !bg-gray-900 rounded-lg !text-gray-200">
-        <input id="password" type="password" placeholder="Password" autocomplete="off" class="m-2 !bg-gray-900 rounded-lg !text-gray-200">
-        <a href='/register' on:click={NavToRegister} role="button" aria-label="Navigate to another component" class="m-2">
+        <div class="flex flex-col">
+            <label for="user">
+                Login Name:
+            </label>
+            <input id="user" type="text" placeholder="Username" autocomplete="off" class="bg-gray-900 rounded-lg text-gray-200 mt-1 mb-2 pl-3">
+            <label for="password">
+                Password:
+            </label>
+            <input id="password" type="password" placeholder="Password" autocomplete="off" class="bg-gray-900 rounded-lg text-gray-200 mt-1 mb-2 pl-3">
+        </div>
+        <button on:click={NavToRegister}>
             Register an account
-        </a>
+        </button>
         <button id="login-btn" on:click={Login} class="m-2">
             Login
         </button>
