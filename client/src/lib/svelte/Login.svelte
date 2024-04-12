@@ -33,10 +33,10 @@
             <input id="password" type="password" placeholder="Password" autocomplete="off" class="bg-gray-900 rounded-lg text-gray-200 mt-1 mb-2 pl-3">
         </div>
         <button on:click={NavToRegister}>
-            Register an account
+            Sign Up
         </button>
         <button id="login-btn" on:click={Login} class="m-2">
-            Login
+            Log In
         </button>
         <span id="response">
             <span id="slime_spinner" class="flex flex-col items-center mt-3 mb-3" style="visibility: hidden;">
