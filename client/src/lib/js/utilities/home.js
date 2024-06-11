@@ -11,65 +11,6 @@ let storageManager = new StorageManager();
 let dynamicDrawer = new DynamicDrawer();
 let dateFormatter = new DateFormatter();
 
-export async function Login(event)
-{
-    event.preventDefault();
-    let BACK_PATH_ = get(BACK_PATH);
-    let BASE_PATH_ = get(BASE_PATH);
-
-    const user = document.getElementById('user');    
-    const password = document.getElementById('password');    
-    const response = document.getElementById('response');
-    const message = document.getElementById('message');
-    const blob = document.getElementById('slime_spinner');
-    
-    let payload = { user: user.value, password: password.value };
-    message.textContent = '';    
-    blob.style.visibility = 'visible';    
-    
-    let serverResponse;
-    try
-    {
-        serverResponse = await dataAccess.postData(`${BACK_PATH_}` + '/login', payload);
-        if(serverResponse)
-        {            
-            let resp = await serverResponse.json();
-            
-            if(serverResponse.ok)
-            {                
-                let svResponse = JSON.parse(resp['response']);
-                
-                if (svResponse.hasOwnProperty('token'))
-                {                
-                    storageManager.WriteLS('user', user.value);
-                    setTimeout(() => {
-                        blob.style.visibility = 'hidden';
-                        navigate(`${BASE_PATH_}` + '/home');
-                    }, 1000);                
-                }
-            }
-            else
-            {
-                blob.style.visibility = 'hidden';
-                message.textContent = 'Error: ' + resp['response'];
-            }
-        }
-        else
-        {
-            blob.style.visibility = 'hidden';
-            let message = 'Error contacting the server. Check your connection.';
-            console.log(serverResponse);
-            message.textContent = msg;
-        }
-    }
-    catch
-    {
-        blob.style.visibility = 'hidden';
-        let msg = 'Error contacting the server. Check your connection.';        
-        message.textContent = msg;
-    }
-}
-
 export async function Logout()
 {
     let BACK_PATH_ = get(BACK_PATH);
@@ -171,7 +112,7 @@ export async function GetTags()
         defaultOption.selected = true;
     }
 
-    let serverResponse = await dataAccess.getData(`${BACK_PATH_}` + '/posts/get_tags');
+    let serverResponse = await dataAccess.getData(`${BACK_PATH_}` + '/posts/get_tags', true);
     if(serverResponse)
     {
         let resp = await serverResponse.json();

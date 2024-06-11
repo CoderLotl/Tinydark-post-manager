@@ -2,7 +2,7 @@
 export class DataAccessFetch
 {
     // GET
-    async getData(url, params = null)
+    async getData(url, params = null, returnResponse = false, showError = true)
     {
         const queryString = new URLSearchParams(params).toString();
         const requestUrl = queryString ? `${url}?${queryString}` : url;
@@ -14,27 +14,45 @@ export class DataAccessFetch
                 headers:
                 {
                     'Content-Type': 'application/json'
-                }
+                },
+                credentials: 'include'
             });            
 
             if(response.ok)
-            {                
-                return response;
+            {
+                if(returnResponse == true || params != null)
+                {
+                    return response;
+                }
+                else
+                {
+                    return true;
+                }
             }
             else
             {
-                return false;
+                if(returnResponse == true || params != null)
+                {
+                    return response;
+                }
+                else
+                {
+                    return false;
+                }
             }
         }
         catch (error)
         {
-            console.error('Error fetching data:');
-            throw error;
+            if(showError == true)
+            {
+                console.error('Error posting data:', error);
+                throw error;
+            }
         }
     }
     
     // POST
-    async postData(url, payload = null)
+    async postData(url, payload = null, returnResponse = false, showError = true)
     {
         try{
             let response;
@@ -43,33 +61,44 @@ export class DataAccessFetch
             response = await fetch(url,
             {
                 method: 'POST',
-                headers: {
+                headers:
+                {
                     'Content-Type': 'application/json'
                 },
                 body: payL,
                 credentials: 'include'
             });
     
-            if(response)
+            if(response.ok)
             {
-                if(payload == null)
+                if(returnResponse == true || payload != null)
                 {
-                    return true;
+                    return response;
                 }
                 else
                 {
-                    return response;
+                    return true;
                 }
             }
             else
             {
-                return false; // or handle the error as needed
+                if(returnResponse == true || payload != null)
+                {
+                    return response;
+                }
+                else
+                {
+                    return false;
+                }
             }
         }
-        catch (error)
+        catch(error)
         {
-            console.error('Error posting data:', error);
-            throw error;
+            if(showError == true)
+            {
+                console.error('Error posting data:', error);
+                throw error;
+            }
         }
     }
 

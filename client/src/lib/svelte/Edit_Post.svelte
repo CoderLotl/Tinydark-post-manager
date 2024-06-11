@@ -1,10 +1,16 @@
 <script>
     import Quill from 'quill';    
-    import { onMount } from 'svelte';        
-    import { GoBack } from '../js/utilities/utilities.js';
+    import { onMount } from 'svelte';
+    import { get } from 'svelte/store';
+    import { navigate } from 'svelte-routing';
+    import { APP_NAME, BASE_PATH } from "../js/stores/stores.js";    
     import { SavePostChanges, AddDismissDialogMechanic, AddGameTagsMechanic, LoadTags } from '../js/utilities/edit_post.js';
     import { StorageManager } from '../js/services/StorageManager.js';
-    import Home_header from './components/Home_header.svelte';
+    import Header from './components/Header.svelte';
+    import Main from './components/Main.svelte';
+    import Footer from './components/Footer.svelte';
+
+    $: APP_NAME_ = $APP_NAME;
     
     let storageManager = new StorageManager();
     let postContent = JSON.parse(storageManager.ReadSS('post'));
@@ -73,23 +79,29 @@
         }
         storageManager.RemoveSS('post');
         SavePostChanges(newPostContent, newPost);
-    }    
+    }
+
+    function GoBack(event)
+    {
+        event.preventDefault();
+        let BASE_PATH_ = get(BASE_PATH);
+        navigate(`${BASE_PATH_}` + '/home');
+    }
 </script>
 
 <svelte:head>
-    <title>Posts Manager - Edit Post</title>
+    <title>{APP_NAME_} - Edit Post</title>
 </svelte:head>
 
-<Home_header>
+<Header>
     <div class="flex flex-col items-center">
         <button on:click={goBack}>
             Go Back
         </button>
     </div>
-</Home_header>
-
-<div class="editor-container mt-40 relative flex flex-col items-center rounded-3xl">
-    <fieldset id="details-fieldset" class="flex flex-col w-full md:w-3/4 px-3 border border-solid rounded-3xl mt-6 bg-slate-800">
+</Header>
+<Main>
+    <fieldset id="details-fieldset" class="flex flex-col w-full md:w-3/4 px-3 border border-solid rounded-3xl mt-[120px] bg-slate-800">
         <legend class="text-base">
             Post Details
         </legend>
@@ -146,13 +158,15 @@
             </button>
         </div>
     </fieldset>
-</div>
 
-<dialog id="dialog" class="flex-col w-full md:w-2/5 h-2/5 border rounded-3xl items-center z-[999] top-1/2 md:top-1/4 bg-[#0e7b2fb5]">    
-    <div id="dialogContent" class="flex flex-col items-center justify-center w-full h-full">
-        <img id="server-response" alt="server response" width="62p" height="62p">
-        <p id="server-message" class="text-white">
+    <dialog id="dialog" class="flex-col w-full md:w-2/5 h-2/5 border rounded-3xl items-center z-[999] top-1/2 md:top-1/4 bg-[#0e7b2fb5]">    
+        <div id="dialogContent" class="flex flex-col items-center justify-center w-full h-full">
+            <img id="server-response" alt="server response" width="62p" height="62p">
+            <p id="server-message" class="text-white">
 
-        </p>
-    </div>    
-</dialog>
+            </p>
+        </div>    
+    </dialog>
+</Main>
+<Footer>        
+</Footer>

@@ -54,24 +54,39 @@ class Wards
         }
     }
 
-    public static function IsAllowed($request, $handler)
+    public static function IsAllowed($request, $handler, int $userType = null)
     {
         $cookies = $request->getCookieParams();        
-        if(isset($cookies['token']))
+        if(isset($cookies[COOKIE_NAME]))
         {            
-            $token = $cookies['token'];
+            $token = $cookies[COOKIE_NAME];
             if(AuthJWT::VerifyToken($token, $request, $handler) == true)
             {
+                if($userType!= null)
+                {                    
+                    $token = AuthJWT::GetData($token);                    
+                    if($token->type == $userType)
+                    {
+                        return $handler->handle($request);
+                    }
+                    else
+                    {
+                        $response = new Response();
+                        return self::ReturnResponse($request, $response, "Unathorized request. You don't have enough rights for this.", 403);
+                    }
+                }
+
                 return $handler->handle($request);
             }
+        }
+        
+        $response = new Response();
+        return self::ReturnResponse($request, $response, "Unathorized request. Token inexistent or not valid.", 401);
+    }
 
-            $response = new Response();
-            return $response->withStatus(401);
-        }
-        else
-        {
-            $response = new Response();
-            return $response->withStatus(401);
-        }
+    private static function ReturnResponse($request, $response, $payload, $status = 200)
+    {        
+        $response->getBody()->write(json_encode(['response' => $payload]));        
+        return $response->withStatus($status);
     }
 }

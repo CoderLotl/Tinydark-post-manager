@@ -13,6 +13,12 @@ class Manager
 {
     // - - - - - - - - - - - - - PUBLIC FUNCTIONS
 
+    public static function ReturnAppName($request, $response)
+    {
+        $payload = APP_NAME;
+        return self::ReturnResponse($request, $response, $payload);
+    }
+
     /**
      * Receives by POST an payload with user and password. Checks if the user exists.
      * If the user exists, retrieves the stored hashed password and verifies the received password against it.

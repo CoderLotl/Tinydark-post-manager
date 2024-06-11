@@ -91,6 +91,8 @@ $app->get('[/]', \Model\Services\Manager::class . '::ReturnToFront')->add(\Model
  * All the routes that lead to pages.
  */
 
+$app->get('/app_name', \Model\Services\Manager::class . '::ReturnAppName');
+
 $app->get('/home', \Model\Services\Manager::class . '::ReturnToFront')->add(\Model\Middlewares\Wards::class . '::Auth');
 
 $app->get('/edit_post', \Model\Services\Manager::class . '::ReturnToFront')->add(\Model\Middlewares\Wards::class . '::Auth');
@@ -114,19 +116,30 @@ $app->post('/register/submit', \Model\Services\Manager::class . '::Register');
 
 $app->post('/verify_account', \Model\Services\Manager::class . '::Verify');
 
-$app->get('/posts/pages_count', \Model\Services\PostManager::class . '::CountPostsPages' );
+$app->group('/posts', function($group)
+{
+    $group->get('/pages_count', \Model\Services\PostManager::class . '::CountPostsPages' );
 
-$app->get('/posts/posts_content', \Model\Services\PostManager::class . '::ReturnPosts' );
+    $group->get('/posts_content', \Model\Services\PostManager::class . '::ReturnPosts' );
 
-$app->get('/posts/post', \Model\Services\PostManager::class . '::ReturnPost');
+    $group->get('/post', \Model\Services\PostManager::class . '::ReturnPost');
 
-$app->get('/posts/get_tags', \Model\Services\PostManager::class . '::GetTags');
+    $group->get('/get_tags', \Model\Services\PostManager::class . '::GetTags');
 
-$app->post('/posts/create_posts', \Model\Services\PostManager::class . '::CreatePost')->add(\Model\Middlewares\Wards::class . '::IsAllowed');
+    $group->post('/create_posts', \Model\Services\PostManager::class . '::CreatePost')->add(\Model\Middlewares\Wards::class . '::IsAllowed');
 
-$app->put('/posts/save_post_changes', \Model\Services\PostManager::class . '::SavePostChanges')->add(\Model\Middlewares\Wards::class . '::IsAllowed');
+    $group->put('/save_post_changes', \Model\Services\PostManager::class . '::SavePostChanges')->add(\Model\Middlewares\Wards::class . '::IsAllowed');
+    
+    $group->delete('/delete_post', \Model\Services\PostManager::class . '::DeletePost')->add(\Model\Middlewares\Wards::class . '::IsAllowed');
+});
 
-$app->delete('/posts/delete_post', \Model\Services\PostManager::class . '::DeletePost')->add(\Model\Middlewares\Wards::class . '::IsAllowed');
+
+$app->group('/verify', function($group)
+{
+    $group->post('/account', \Model\Services\Manager::class . '::Verify');
+    
+    $group->post('/token', \Model\Services\AuthJWT::class . '::VerifyAuthorization');
+});
 
 #endregion
 
