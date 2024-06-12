@@ -14,7 +14,7 @@ export async function Verify()
     let content = document.createElement('p');
     vContent.appendChild(content);
     
-    let response = await DataAccess.postData(`${BACK_PATH_}` + '/verify_account', {code: code});
+    let response = await DataAccess.postData(`${BACK_PATH_}` + '/verify/account', {code: code});
     if(response)
     {
         let resp = await response.json();

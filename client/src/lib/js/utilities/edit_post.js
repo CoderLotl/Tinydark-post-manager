@@ -17,55 +17,109 @@ export async function SavePostChanges(postContent, isNewPost)
     let BACK_PATH_ = get(BACK_PATH);
     let BASE_PATH_ = get(BASE_PATH);
     let payload = postContent;
-    let serverResponse;    
-
-    if(isNewPost)
-    {
-        serverResponse = await dataAccess.postData(`${BACK_PATH_}` + '/posts/create_posts', payload);
-    }
-    else
-    {
-        serverResponse = await dataAccess.putData(`${BACK_PATH_}` + '/posts/save_post_changes', payload);
-    }
-
+    let serverResponse;
+    let postReady = false;
     let server_resp = document.getElementById('server-response');
-    let server_msg = document.getElementById('server-message');        
-    if(serverResponse)
+    let server_msg = document.getElementById('server-message');
+    let dialog = document.getElementById('dialog');
+    let errors = [];    
+
+    if(postContent.headline.trim() == '')
     {
-        document.getElementById('dialog').classList.add('flex');
-        if(serverResponse.ok)
+        errors.push('- Set the TITLE for this post.');        
+    }
+
+    if(postContent.game == null)
+    {
+        let tagInput = document.getElementById('game-editor').value.trim();         
+        if(tagInput == '')
         {
-            let msg;
-            if(isNewPost)
-            {
-                msg = 'Post Created!';
-            }
-            else
-            {
-                msg = 'Post Updated!';
-            }
-            server_resp.src = checked;
-            server_resp.style.backgroundColor = '#a8ccb2';
-            server_msg.textContent = `${msg} Returning...`;
-            setTimeout(() =>
-            {
-                navigate(`${BASE_PATH_}` + '/home');
-            }, 2000);
+            errors.push('- Set at least one TAG for this post.');            
         }
         else
         {
-            server_resp.src = error;
-            server_resp.style.backgroundColor = 'rgb(255, 255, 255)';
-            server_msg.textContent = 'Error: unathorized action';
+            postContent.game = tagInput;
         }
+    }
+
+    let post_content = postContent.content.replace(/<[^>]*>/g, '');
+    if(post_content.trim() == '')
+    {
+        errors.push('- Set the CONTENT for this post.');
+    }
+
+    if(errors.length == 0)
+    {
+        postReady = true;   
+    }
+
+    if(postReady)
+    {
+        if(isNewPost)
+        {
+            serverResponse = await dataAccess.postData(`${BACK_PATH_}` + '/posts/create_posts', payload);
+        }
+        else
+        {
+            serverResponse = await dataAccess.putData(`${BACK_PATH_}` + '/posts/save_post_changes', payload);
+        }   
+
+        if(serverResponse)
+        {            
+            if(serverResponse.ok)
+            {
+                let msg;
+                if(isNewPost)
+                {
+                    msg = 'Post Created!';
+                }
+                else
+                {
+                    msg = 'Post Updated!';
+                }
+                
+                server_resp.src = checked;
+                server_resp.style.backgroundColor = '#a8ccb2';
+                dialog.style.backgroundColor = '#0e7b2fb5';
+                server_msg.textContent = `${msg} Returning...`;
+                setTimeout(() =>
+                {
+                    navigate(`${BASE_PATH_}` + '/home');
+                }, 2000);
+            }
+            else
+            {
+                server_resp.src = error;
+                server_resp.style.backgroundColor = 'rgb(255, 50, 0)';
+                dialog.style.backgroundColor = 'rgba(255, 50, 0, 0.5)';
+                server_msg.textContent = 'Error: unathorized action';
+            }
+        }
+        else
+        {            
+            server_resp.src = error;
+            server_resp.style.backgroundColor = 'rgb(128, 128, 128)';
+            dialog.style.backgroundColor = 'rgba(128, 128, 128, 0.5)';
+            server_msg.textContent = 'Error contacting the server. Check your internet.';
+        }        
     }
     else
     {
-        document.getElementById('dialog').classList.add('flex');
         server_resp.src = error;
-        server_resp.style.backgroundColor = '';
-        server_msg.textContent = 'Error contacting the server. Check your internet.';
+        server_resp.style.backgroundColor = 'rgb(255, 50, 0)';
+        dialog.style.backgroundColor = 'rgba(255, 50, 0, 0.5)';
+        server_msg.textContent = '';
+        server_msg.innerHTML = 'Error:<br><br>';
+        for(let i = 0; i < errors.length; i++)
+        {
+            server_msg.innerHTML += `${errors[i]}`;
+            if(i < errors.length)
+            {
+                server_msg.innerHTML += '<br>';
+            }
+        }        
     }
+    dialog.classList.add('flex');    
 }
 
 export function CloseDialog()
@@ -75,24 +129,28 @@ export function CloseDialog()
     dialog.close();
 }
 
-export function AddDismissDialogMechanic()
-{
-    window.addEventListener('click', ()=>
-    {            
-        let dialog = document.getElementById('dialog');
-        if(dialog.classList.contains('flex'))
-        {                
-            dialog.classList.remove('flex');                
+export function AddDismissDialogMechanic() {
+    let saveChangesBtn = document.getElementById('save_changes_btn');
+    let dialog = document.getElementById('dialog');  
+    
+    document.addEventListener('click', (event) =>
+    {
+        if(!event.target.matches('#save_changes_btn'))
+        {
+            if(dialog.classList.contains('flex'))
+            {
+                dialog.classList.remove('flex');
+            }
         }
     });
-}
+  }
 
 /**
  * 
  */
 export function AddGameTagsMechanic()
 {
-    let tagsInput = document.getElementById('game-editor');    
+    let tagsInput = document.getElementById('game-editor');
 
     tagsInput.addEventListener('keydown', (event)=> // TAG INPUT MECHANIC
     {

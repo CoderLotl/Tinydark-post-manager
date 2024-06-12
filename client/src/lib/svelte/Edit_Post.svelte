@@ -74,7 +74,7 @@
                 content: quill.root.innerHTML,
                 headline: quill2.getText().trim(),
                 game: JSON.parse(storageManager.ReadSS('tags')),
-                url: quill3.getText().trim(),                
+                url: quill3.getText().trim(),
             };
         }
         storageManager.RemoveSS('post');
@@ -153,18 +153,18 @@
             <button on:click={GoBack}>
                 Go Back
             </button>
-            <button on:click={handleSavingPostChanges}>
+            <button id="save_changes_btn" on:click={handleSavingPostChanges}>
                 Save Changes
             </button>
         </div>
     </fieldset>
 
-    <dialog id="dialog" class="flex-col w-full md:w-2/5 h-2/5 border rounded-3xl items-center z-[999] top-1/2 md:top-1/4 bg-[#0e7b2fb5]">    
+    <dialog id="dialog" class="flex-col w-full md:w-2/5 h-2/5 border rounded-3xl items-center z-[999] top-1/2 md:top-1/4">    
         <div id="dialogContent" class="flex flex-col items-center justify-center w-full h-full">
             <img id="server-response" alt="server response" width="62p" height="62p">
-            <p id="server-message" class="text-white">
+            <span id="server-message" class="text-white">
 
-            </p>
+            </span>
         </div>    
     </dialog>
 </Main>

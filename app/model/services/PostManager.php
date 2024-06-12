@@ -136,6 +136,7 @@ class PostManager
         $dateString = $date->format('Y-m-d H:i:s');
 
         $tags = '';
+        Log::WriteLog('post.txt', json_encode($params));
 
         $create = DataAccess::Insert(
             POSTS,

@@ -114,8 +114,6 @@ $app->post('/check_logged_in', \Model\Middlewares\Wards::class . '::IsAllowed');
 
 $app->post('/register/submit', \Model\Services\Manager::class . '::Register');
 
-$app->post('/verify_account', \Model\Services\Manager::class . '::Verify');
-
 $app->group('/posts', function($group)
 {
     $group->get('/pages_count', \Model\Services\PostManager::class . '::CountPostsPages' );
