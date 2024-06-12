@@ -29,7 +29,7 @@ export async function SavePostChanges(postContent, isNewPost)
         errors.push('- Set the TITLE for this post.');        
     }
 
-    if(postContent.game == null)
+    if(postContent.game == null || postContent.game.length == 0)
     {
         let tagInput = document.getElementById('game-editor').value.trim();         
         if(tagInput == '')
