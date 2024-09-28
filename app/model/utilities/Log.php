@@ -1,6 +1,9 @@
 <?php
 namespace Model\Utilities;
 
+use Model\Services\AuthJWT;
+use Model\Services\DataAccessMDB;
+
 /**
  * [Description Log]
  * Utility class. Creates, erases, and deletes .txt files. Useful for when you have to log some message error B) 
