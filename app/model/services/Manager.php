@@ -29,7 +29,8 @@ class Manager
         try
         {
             $params = self::GetRequest($request);
-            $password = $params['password'];            
+            $devMode = DEV_MODE;
+            $password = null;
             $user = DataAccess::SelectWhere(USERS, ['user'], [$params['user']]);            
             $payload = '';
             
@@ -38,20 +39,24 @@ class Manager
             }
 
             $user = $user[0];
-
-            if(!password_verify($password, $user['password'])) // We check if the password is right.
+            if(!$devMode)
             {
-                return self::ReturnResponse($request, $response, 'Invalid password.', 400);
-            }
-
-            if(!$user['verified'] == 1) // We check if the user is a verified account.
-            {
-                return self::ReturnResponse($request, $response, 'The account has not been verified their account yet.', 400);
+                $password = $params['password'];
+                if(!password_verify($password, $user['password'])) // We check if the password is right.
+                {
+                    return self::ReturnResponse($request, $response, 'Invalid password.', 400);
+                }
+    
+                if(!$user['verified'] == 1) // We check if the user is a verified account.
+                {
+                    return self::ReturnResponse($request, $response, 'The account has not been verified their account yet.', 400);
+                }
             }
 
             // We create the token
             $jwt = AuthJWT::NewToken($params['user']);
-            $expireTime = time() + 36000;                   
+            $tokenTime = $devMode ? 36000000 : 36000;
+            $expireTime = time() + $tokenTime;
 
             $payload = json_encode(['token' => $jwt]);
 
@@ -173,3 +178,4 @@ class Manager
         return $response->withHeader('Location', "/{$page}")->withStatus($code);
     }
 }
+?>
