@@ -6,6 +6,7 @@
   import { BACK_PATH, BASE_PATH} from "./lib/js/stores/stores.js";
   import { writable, get } from 'svelte/store';
   import { GetAppName } from './lib/js/utilities/app.js';
+  import { globals } from './config/config.js';
 
   // COMPONENTS
   import Login from './lib/svelte/Login.svelte';
@@ -15,17 +16,17 @@
   import Verify from './lib/svelte/Verify.svelte';
   import Error from './lib/svelte/Error.svelte';
 
-  const isDev = import.meta.env.MODE;  
+  const isDev = import.meta.env.MODE;
 
   if(isDev == 'development')
   {
-    BASE_PATH.set('/client/dist');
-    BACK_PATH.set('http://localhost'); // << - - - SET YOUR DEV URL HERE    
+    BASE_PATH.set(globals.development.base_path);
+    BACK_PATH.set(globals.development.back_path); // << - - - SET YOUR DEV URL AT CONFIG.JS    
   }
   else
   {
-    BASE_PATH.set('');
-    BACK_PATH.set(window.location.origin); // << - - - SET YOUR PROD URL HERE    
+    BASE_PATH.set(globals.live.base_path);
+    BACK_PATH.set(globals.live.back_path); // << - - - SET YOUR PROD URL AT CONFIG.JS
   }
   
   let BASE_PATH_ = get(BASE_PATH);
