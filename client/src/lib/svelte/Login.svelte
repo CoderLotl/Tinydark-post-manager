@@ -2,8 +2,7 @@
     import { navigate } from 'svelte-routing';
     import { BASE_PATH, APP_NAME } from "../js/stores/stores.js";
     import { get } from 'svelte/store';
-    import { Login } from '../js/utilities/login.js';
-    import { onMount } from 'svelte';
+    import { Login } from '../js/utilities/login.js';    
 
     import Main from './components/Main.svelte';
     import Footer from './components/Footer.svelte';
@@ -11,8 +10,8 @@
     import blob from '../../assets/2022_sm_002.png';
 
     $: APP_NAME_ = $APP_NAME;
-
-    let loggedIn = false;
+    
+    const isDev = import.meta.env.MODE == 'development' ? true : false;    
 
     function NavToRegister(event)
     {
@@ -40,10 +39,12 @@
                 Login Name:
             </label>
             <input id="user" type="text" placeholder="Username" autocomplete="off" class="bg-gray-900 rounded-lg text-gray-200 mt-1 mb-2 pl-3">
-            <label for="password">
-                Password:
-            </label>
-            <input id="password" type="password" placeholder="Password" autocomplete="off" class="bg-gray-900 rounded-lg text-gray-200 mt-1 mb-2 pl-3">
+            {#if !isDev}
+                <label for="password">
+                    Password:
+                </label>
+                <input id="password" type="password" placeholder="Password" autocomplete="off" class="bg-gray-900 rounded-lg text-gray-200 mt-1 mb-2 pl-3">
+            {/if}
         </div>
 
         <div class="flex flex-col">
