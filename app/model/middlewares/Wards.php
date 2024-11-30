@@ -5,6 +5,7 @@ use Model\Services\AuthJWT;
 use Model\Utilities\Log;
 use Slim\Psr7\Response;
 use Slim\Routing\RouteContext;
+use Model\Services\ResponseManager;
 
 class Wards
 {
@@ -72,7 +73,7 @@ class Wards
                     else
                     {
                         $response = new Response();
-                        return self::ReturnResponse($request, $response, "Unathorized request. You don't have enough rights for this.", 403);
+                        return ResponseManager::ReturnResponse($request, $response, "Unathorized request. You don't have enough rights for this.", 403);
                     }
                 }
 
@@ -81,12 +82,25 @@ class Wards
         }
         
         $response = new Response();
-        return self::ReturnResponse($request, $response, "Unathorized request. Token inexistent or not valid.", 401);
+        return ResponseManager::ReturnResponse($request, $response, "Unathorized request. Token inexistent or not valid.", 401);
     }
 
-    private static function ReturnResponse($request, $response, $payload, $status = 200)
-    {        
-        $response->getBody()->write(json_encode(['response' => $payload]));        
-        return $response->withStatus($status);
+    /**
+     * Checks if the entering connection is local. Filters any non-local connection and returns an error.
+     * @param mixed $request
+     * @param mixed $handler
+     * 
+     * @return [type]
+     */
+    public static function IsLocal($request, $handler)
+    {
+        $remoteAddress = $request->getServerParams()['REMOTE_ADDR'];
+        if($remoteAddress != '127.0.0.1' && $remoteAddress != '::1')
+        {
+            $response = new Response();
+            return ResponseManager::ReturnResponse($request, $response, 'Forbidden', 403);
+        }
+        
+        return $handler->handle($request);
     }
 }
