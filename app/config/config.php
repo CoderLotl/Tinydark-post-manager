@@ -17,6 +17,7 @@ define('ERRORS', APP_ROOT . '/errors');
 define('GMT', '+3'); // << - - - SET YOUR TIMEZONE HERE
 define('APP_NAME', 'RPG'); // << - - - SET YOUR APP'S NAME HERE
 define('SEND_MAIL', false); // << - - - IS IT SHOULD SEND A MAIL.
+define('DEV_MODE', true);
 
 // - - - - - [ TOKEN CONFIGURATION ]
 
