@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { navigate } from 'svelte-routing';
 import { DataAccessFetch } from "../services/DataAccessFetch.js";
 import { StorageManager } from '../services/StorageManager.js';
@@ -13,8 +14,9 @@ export async function Login(event)
     let BACK_PATH_ = get(BACK_PATH);
     let BASE_PATH_ = get(BASE_PATH);
 
-    const user = document.getElementById('user');    
-    const password = document.getElementById('password');    
+    const user = document.getElementById('user');
+    const isDev = import.meta.env.MODE;
+    let password = isDev ? false : document.getElementById('password');    
     const response = document.getElementById('response');
     const message = document.getElementById('message');
     const blob = document.getElementById('slime_spinner');
