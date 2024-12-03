@@ -50,12 +50,12 @@
     </Header>
 
     <!-- PREVIEW DIALOG -->
-    <dialog id="dialog" class="flex-col items-center w-full md:w-3/5 h-3/4 top-24 md:top-36 bg-[#4f575e] z-[977] border-black border-4 fixed hidden">
-        <div id="dialog-title" class="w-full mt-2 italic text-[24px] text-cyan-400 items-center flex flex-col">
+    <dialog id="dialog" class="flex-col items-center w-full md:w-3/5 h-3/4 top-24 md:top-36 bg-darkGrey z-[977] border-black border-4 fixed hidden">
+        <div id="dialog-title" class="w-full mt-2 italic text-[24px] text-textColor items-center flex flex-col">
             <p id="title"></p>
             <p id="date"></p>
         </div>    
-        <div id="dialogContent" class="w-[95%] h-3/4 bg-[#222e38] text-slate-200 rounded-xl p-4 overflow-scroll">
+        <div id="dialogContent" class="w-[95%] h-3/4 bg-accentGrey text-slate-200 rounded-xl p-4 overflow-scroll">
             <!-- DIALOG CONTENT -->
         </div>
         <div class="flex mb-2">
@@ -69,7 +69,7 @@
     </dialog>
 
     <!-- DELETE POST DIALOG -->
-    <dialog id="confirm-dialog" class="flex-col items-center w-full md:w-2/5 h-1/4 top-64 bg-[#215077cc] z-[977] rounded-3xl fixed hidden">
+    <dialog id="confirm-dialog" class="flex-col items-center w-full md:w-2/5 h-1/4 top-64 bg-darkGrey z-[977] border-black border-solid border-2 fixed hidden">
         <p class="justify-self-center text-slate-200 mt-3">Are you sure you want to delete this post?</p>
         <div class="flex justify-self-center mt-3">
             <button id="btnDeny" class="mr-3" on:click={CloseDeleteDialog}>
@@ -84,7 +84,7 @@
     <!-- DROPDOWN SELECTORS -->
     <div class="flex justify-around w-full relative mt-32 bg-[#0f0f0f] pb-3">
         <div class="flex flex-col">
-            <label for="posts-amount" class="text-orange-500">
+            <label for="posts-amount" class="text-activeOrange">
                 Posts per Page
             </label>
             <select id="posts-amount" dir="ltl" class="bg-neutral-900 flex" on:change={SetPosts}>
@@ -94,7 +94,7 @@
             </select>
         </div>
         <div class="flex flex-col">
-            <label for="tags" dir="ltr" class="text-orange-500">
+            <label for="tags" dir="ltr" class="text-activeOrange">
                 Tags
             </label>
             <select id="tags" class="bg-neutral-900 text-left" on:change={SetTags}>
