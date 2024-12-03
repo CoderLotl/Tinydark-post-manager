@@ -9,6 +9,12 @@
     import Header from './components/Header.svelte';
     import Main from './components/Main.svelte';
     import Footer from './components/Footer.svelte';
+    import bold from '../../assets/bold-text-option.png';
+    import italic from '../../assets/italic-font.png';
+    import underline from '../../assets/underline.png';
+    import link from '../../assets/link.png';
+    import strikethrough from '../../assets/strikethrough.png';
+    import color from '../../assets/paint-roller.png';
 
     $: APP_NAME_ = $APP_NAME;
     
@@ -146,8 +152,8 @@
     </div>
 </Header>
 <Main>
-    <fieldset id="details-fieldset" class="flex flex-col w-full md:w-3/4 px-3 border border-solid rounded-3xl mt-[120px] bg-slate-800">
-        <legend class="text-base">
+    <fieldset id="details-fieldset" class="flex flex-col w-full md:w-3/4 px-3 border-black border-2 border-solid mt-[120px] bg-darkest">
+        <legend class="text-base px-2 border-black border-2 bg-lightGrey">
             Post Details
         </legend>
         <div id="first-row-details" class="flex flex-col">
@@ -155,7 +161,7 @@
                 <label for="title-editor" class="text-lg">
                     Title
                 </label>
-                <div id="title-editor" class="editor w-full rounded-3xl px-6 italic">
+                <div id="title-editor" class="editor w-full px-6 italic">
     
                 </div>
             </div>
@@ -163,7 +169,7 @@
                 <label for="url-editor" class="text-lg">
                     URL
                 </label>
-                <div id="url-editor" class="editor w-full rounded-3xl px-6 italic">
+                <div id="url-editor" class="editor w-full px-6 italic">
     
                 </div>
             </div>
@@ -175,23 +181,38 @@
                 </label>
                 <div id="element-tags" class="flex flex-wrap w-ful mb-2">
                 </div>
-                <input type="text" tabindex="3" placeholder="Write some tag name here" id="game-editor" class="editor w-3/5 md:w-1/2 rounded-3xl pr-0 pl-3 md:pl-3 italic">
+                <input type="text" tabindex="3" placeholder="Write some tag name here" id="game-editor" class="editor w-3/5 md:w-1/2 pr-0 pl-3 md:pl-3 italic bg-darkest">
             </div>
         </div>
     </fieldset>    
-    <fieldset id="post-content-fieldset" class="flex flex-col items-center w-full md:w-3/4 border border-solid rounded-3xl mt-6 pl-3 pr-3 bg-slate-800">
-        <legend class="text-base">
+
+    <fieldset id="post-content-fieldset" class="flex flex-col items-center w-full md:w-3/4 border-black border-2 border-solid mt-6 pl-3 pr-3 bg-darkest">
+        <legend class="text-base px-2 border-black border-2 bg-lightGrey">
             Post content
         </legend>
         <fieldset id="toolbar" class="flex justify-center w-full border border-solid my-6">
             <div id="toolbar" class="my-2">
-                <button class="ql-bold td-button">B</button>
-                <button class="ql-italic td-button">I</button>
-                <button class="ql-underline td-button">U</button>
-                <button class="ql-link td-button">Link</button>
+                <button class="ql-bold td-button font-bold">
+                    <img src={bold} width="16" height="16">
+                </button>
+                <button class="ql-italic td-button italic">
+                    <img src={italic} width="16" height="16">
+                </button>
+                <button class="ql-underline td-button">
+                    <img src={underline} width="16" height="16">
+                </button>
+                <button class="ql-link td-button">
+                    <img src={link} width="16" height="16">
+                </button>
+                <button class="ql-strike td-button">
+                    <img src={strikethrough} width="16" height="16">
+                </button>
+                <select class="ql-color td-button">
+                    <img src={color} width="16" height="16">
+                </select>
             </div>
         </fieldset>
-        <div id='post-editor' class="h-min-full w-full rounded-3xl p-6 my-6 editor">
+        <div id='post-editor' class="h-min-full w-full p-6 my-6 editor">
         
         </div>
         <div class="mb-6">

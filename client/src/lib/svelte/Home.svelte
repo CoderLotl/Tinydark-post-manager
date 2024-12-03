@@ -50,8 +50,11 @@
     </Header>
 
     <!-- PREVIEW DIALOG -->
-    <dialog id="dialog" class="flex-col items-center w-full md:w-3/5 h-3/4 top-24 md:top-36 bg-[#215077] z-[977] rounded-3xl fixed hidden">
-        <p id="dialog-title" class="w-full mt-2 italic text-[24px] text-cyan-400 items-center flex flex-col"></p>    
+    <dialog id="dialog" class="flex-col items-center w-full md:w-3/5 h-3/4 top-24 md:top-36 bg-[#4f575e] z-[977] border-black border-4 fixed hidden">
+        <div id="dialog-title" class="w-full mt-2 italic text-[24px] text-cyan-400 items-center flex flex-col">
+            <p id="title"></p>
+            <p id="date"></p>
+        </div>    
         <div id="dialogContent" class="w-[95%] h-3/4 bg-[#222e38] text-slate-200 rounded-xl p-4 overflow-scroll">
             <!-- DIALOG CONTENT -->
         </div>
@@ -84,17 +87,17 @@
             <label for="posts-amount" class="text-orange-500">
                 Posts per Page
             </label>
-            <select id="posts-amount" class="bg-neutral-900 text-center" on:change={SetPosts}>            
+            <select id="posts-amount" dir="ltl" class="bg-neutral-900 flex" on:change={SetPosts}>
                 <option value="5">5</option>
                 <option value="10">10</option>
                 <option value="15">15</option>
             </select>
         </div>
         <div class="flex flex-col">
-            <label for="tags" class="text-orange-500">
+            <label for="tags" dir="ltr" class="text-orange-500">
                 Tags
             </label>
-            <select id="tags" class="bg-neutral-900 text-center" on:change={SetTags}>
+            <select id="tags" class="bg-neutral-900 text-left" on:change={SetTags}>
                 
             </select>
         </div>
@@ -103,12 +106,12 @@
     <!-- POSTS SECTION -->
     <div class="flex flex-col items-center w-full relative">
         <div id="posts-titles-container" class="w-full h-full flex flex-col items-center overflow-visible md:mt-20">
-            <div class="w-full md:w-3/4 bg-[#0f0f0f] md:rounded-t-[20px] p-3">
+            <div class="w-full md:w-3/4 bg-[#0f0f0f] p-3">
                 <button class="rounded-xl" on:click={CreatePost}>
                     Create New Post
                 </button>
             </div>
-            <div id="posts" class="w-full flex flex-col items-center md:w-3/4 bg-black mb-10 md:mb-20 rounded-b-[20px]">
+            <div id="posts" class="w-full flex flex-col items-center md:w-3/4 bg-black mb-10 md:mb-20">
             </div>
         </div>
     </div>

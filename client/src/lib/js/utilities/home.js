@@ -311,21 +311,17 @@ function AddPreviewBtnMechanic(btn, postContainer)
     {        
         let post = await GetPostContent(postContainer);
         let dialogContent = document.getElementById('dialogContent');
-        let dialogTitle = document.getElementById('dialog-title');
+        let title = document.getElementById('title');
+        let date = document.getElementById('date');
 
-        let dialogTitle_p1 = document.createElement('p');
-        let dialogTitle_p2 = document.createElement('p');
-        dialogTitle.append(dialogTitle_p1);
-        dialogTitle.append(dialogTitle_p2);
-
-        dialogTitle_p1.classList = 'text-[24px]';
-        dialogTitle_p2.classList = 'text-[20px]';
+        title.classList = 'text-[24px] mt-4';
+        date.classList = 'text-[20px]';
 
         if(post)
         {
             let formattedDate = formatDate(post.date);
-            dialogTitle_p1.textContent = post.headline;
-            dialogTitle_p2.textContent = formattedDate;            
+            title.textContent = post.headline;
+            date.textContent = formattedDate;            
             dialogContent.setAttribute('post-attributes', JSON.stringify({game: post.game, headline: post.headline, id: post.id, url: post.url }));
             dialogContent.innerHTML = post.content;                        
             document.getElementById('dialog').style.display = 'flex';

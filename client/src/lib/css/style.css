@@ -108,7 +108,7 @@
 
 .editor
 {
-  background-color: #215077a2;
+  background-color: var(--lightGrey);
   color: rgb(201, 201, 201);
   overflow-wrap: break-word;
 }
