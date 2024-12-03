@@ -50,8 +50,8 @@
     </Header>
 
     <!-- PREVIEW DIALOG -->
-    <dialog id="dialog" class="flex-col items-center post-dialog w-full md:w-3/5 h-3/4 top-24 md:top-36 bg-[#215077cc] z-[977] rounded-3xl fixed hidden">
-        <p id="dialog-title" class="mt-2 italic text-[24px] text-cyan-400"></p>    
+    <dialog id="dialog" class="flex-col items-center w-full md:w-3/5 h-3/4 top-24 md:top-36 bg-[#215077] z-[977] rounded-3xl fixed hidden">
+        <p id="dialog-title" class="w-full mt-2 italic text-[24px] text-cyan-400 items-center flex flex-col"></p>    
         <div id="dialogContent" class="w-[95%] h-3/4 bg-[#222e38] text-slate-200 rounded-xl p-4 overflow-scroll">
             <!-- DIALOG CONTENT -->
         </div>

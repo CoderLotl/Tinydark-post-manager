@@ -1,6 +1,6 @@
 <script>
     import Quill from 'quill';    
-    import { onMount } from 'svelte';
+    import { onMount, tick } from 'svelte';
     import { get } from 'svelte/store';
     import { navigate } from 'svelte-routing';
     import { APP_NAME, BASE_PATH } from "../js/stores/stores.js";    
@@ -23,8 +23,11 @@
 
     let tabIndexes = [];
 
-    onMount( ()=>
-    {        
+    let instance = 'Create';
+
+    onMount( async ()=>
+    {
+        await tick();
         quill = new Quill('#post-editor',
         {
             modules:
@@ -35,28 +38,36 @@
         quill2 = new Quill('#title-editor');        
         quill3 = new Quill('#url-editor');
 
-        if(newPost == false)
+        if(!newPost)
         {
             quill.root.innerHTML = postContent.content;
             quill2.root.innerHTML = postContent.headline;            
             quill3.root.innerHTML = postContent.url;
             LoadTags(postContent.game);
+            instance = 'Edit';
         }
-        
-        let ql_editors = document.querySelectorAll('.ql-editor');
+
+        await tick();
+        setTabIndexes();
+
+        AddDismissDialogMechanic();
+        AddGameTagsMechanic();
+    });
+    
+    function setTabIndexes()
+    {
+        let ql_editors = document.querySelectorAll('.ql-editor');        
         tabIndexes.push({element: ql_editors[0].getElementsByTagName('p')[0], index: 1});
         tabIndexes.push({element: ql_editors[1].getElementsByTagName('p')[0], index: 2});
         tabIndexes.push({element: document.getElementById('game-editor'), index: 3});
         tabIndexes.push({element: ql_editors[2].getElementsByTagName('p')[0], index: 4});
         tabIndexes.push({element: document.getElementById('goBack_btn'), index: 5});
-        tabIndexes.push({element: document.getElementById('save_changes_btn'), index: 6});
-
+        tabIndexes.push({element: document.getElementById('save_changes_btn'), index: 6});        
 
         ql_editors[0].getElementsByTagName('p')[0].tabIndex = 1;
-        ql_editors[1].getElementsByTagName('p')[0].tabIndex = 2;        
+        ql_editors[1].getElementsByTagName('p')[0].tabIndex = 2;
         ql_editors[2].getElementsByTagName('p')[0].tabIndex = 4;
 
-        //console.log(tabIndexes.length);
         for(let i = 0; i < tabIndexes.length; i++)
         {
             tabIndexes[i].element.addEventListener('keydown', (event)=>
@@ -77,11 +88,7 @@
                 }
             });            
         }
-
-        AddDismissDialogMechanic();
-        AddGameTagsMechanic();
-    });
-    
+    }
 
     function goBack(event)
     {
@@ -128,7 +135,7 @@
 </script>
 
 <svelte:head>
-    <title>{APP_NAME_} - Edit Post</title>
+    <title>{APP_NAME_} - {instance} Post</title>
 </svelte:head>
 
 <Header>

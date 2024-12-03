@@ -312,14 +312,69 @@ function AddPreviewBtnMechanic(btn, postContainer)
         let post = await GetPostContent(postContainer);
         let dialogContent = document.getElementById('dialogContent');
         let dialogTitle = document.getElementById('dialog-title');
+
+        let dialogTitle_p1 = document.createElement('p');
+        let dialogTitle_p2 = document.createElement('p');
+        dialogTitle.append(dialogTitle_p1);
+        dialogTitle.append(dialogTitle_p2);
+
+        dialogTitle_p1.classList = 'text-[24px]';
+        dialogTitle_p2.classList = 'text-[20px]';
+
         if(post)
-        {            
-            dialogTitle.textContent = `"${post.headline} - ${post.date}"`;
+        {
+            let formattedDate = formatDate(post.date);
+            dialogTitle_p1.textContent = post.headline;
+            dialogTitle_p2.textContent = formattedDate;            
             dialogContent.setAttribute('post-attributes', JSON.stringify({game: post.game, headline: post.headline, id: post.id, url: post.url }));
             dialogContent.innerHTML = post.content;                        
             document.getElementById('dialog').style.display = 'flex';
         }
     });
+}
+
+function formatDate(dateString)
+{
+    // Create a Date object from the provided string
+    const date = new Date(dateString);
+  
+    // Define an array for short month names (zero-indexed)
+    const monthNames = [
+      "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+      "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    ];
+  
+    // Get day, month index, year, hours, and minutes
+    const day = date.getDate();    
+    const monthIndex = date.getMonth();
+    const year = date.getFullYear();
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+  
+    // Get the ordinal indicator (st, nd, rd, th)
+    const ordinalIndicator = getOrdinalIndicator(day);
+  
+    // Format the date string
+    return `${monthNames[monthIndex]} ${day}${ordinalIndicator} ${year} ${hours}:${minutes}`;
+}
+  
+function getOrdinalIndicator(i)
+{
+    let j = i % 10;
+    let k = i % 100;
+    if(j === 1 && k !== 11)
+    {
+        return "st";
+    }
+    if(j === 2 && k !== 12)
+    {
+        return "nd";
+    }
+    if(j === 3 && k !== 13)
+    {
+        return "rd";
+    }
+    return "th";
 }
 
 async function AddEditBtnMechanic(btn, postContainer)
