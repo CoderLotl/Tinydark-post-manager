@@ -49,13 +49,17 @@
 
         <div class="flex flex-col">
             <button on:click={Login}
-                class="m-2 px-4 py-2 rounded-md bg-orange-600 hover:bg-orange-500 shadow-[0_4px_rgba(5,5,59,1)] hover:shadow-[0_4px_rgba(133,133,231,1)] active:translate-y-[4px] active:shadow-[0_0_rgb(133,133,231)] active:transition duration-100
+                class="
+                m-2 px-4 py-2 rounded-md bg-orange-600 hover:bg-orange-500 shadow-[0_4px_rgba(5,5,59,1)] 
+                hover:shadow-[0_4px_rgba(133,133,231,1)] active:translate-y-[4px] active:shadow-[0_0_rgb(133,133,231)] active:transition duration-100
                 font-bold text-slate-200"
             >
                 Log In
-            </button>
+            </button>            
             <button on:click={NavToRegister}
-                class="m-2 px-4 py-2 rounded-md bg-red-600 hover:bg-red-500 shadow-[0_4px_rgba(5,5,59,1)] hover:shadow-[0_4px_rgba(133,133,231,1)] active:translate-y-[4px] active:shadow-[0_0_rgb(133,133,231)] active:transition duration-100
+                class="
+                m-2 px-4 py-2 rounded-md bg-red-600 hover:bg-red-500 shadow-[0_4px_rgba(5,5,59,1)]
+                hover:shadow-[0_4px_rgba(133,133,231,1)] active:translate-y-[4px] active:shadow-[0_0_rgb(133,133,231)] active:transition duration-100
                 font-bold text-slate-200"
             >
                 Sign up

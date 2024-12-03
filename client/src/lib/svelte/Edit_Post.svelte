@@ -19,7 +19,9 @@
 
     let quill;
     let quill2;
-    let quill3;    
+    let quill3;
+
+    let tabIndexes = [];
 
     onMount( ()=>
     {        
@@ -40,10 +42,46 @@
             quill3.root.innerHTML = postContent.url;
             LoadTags(postContent.game);
         }
+        
+        let ql_editors = document.querySelectorAll('.ql-editor');
+        tabIndexes.push({element: ql_editors[0].getElementsByTagName('p')[0], index: 1});
+        tabIndexes.push({element: ql_editors[1].getElementsByTagName('p')[0], index: 2});
+        tabIndexes.push({element: document.getElementById('game-editor'), index: 3});
+        tabIndexes.push({element: ql_editors[2].getElementsByTagName('p')[0], index: 4});
+        tabIndexes.push({element: document.getElementById('goBack_btn'), index: 5});
+        tabIndexes.push({element: document.getElementById('save_changes_btn'), index: 6});
+
+
+        ql_editors[0].getElementsByTagName('p')[0].tabIndex = 1;
+        ql_editors[1].getElementsByTagName('p')[0].tabIndex = 2;        
+        ql_editors[2].getElementsByTagName('p')[0].tabIndex = 4;
+
+        //console.log(tabIndexes.length);
+        for(let i = 0; i < tabIndexes.length; i++)
+        {
+            tabIndexes[i].element.addEventListener('keydown', (event)=>
+            {
+                let this_index = tabIndexes[i].index;
+                if(event.key == 'Tab')
+                {                    
+                    event.preventDefault();
+                    for(let j = 0; j < tabIndexes.length; j++)
+                    {
+                        if(tabIndexes[j].index == this_index + 1)
+                        {
+                            tabIndexes[j].element.focus();
+                            return;
+                        }
+                    }
+                    tabIndexes[0].element.focus();
+                }
+            });            
+        }
 
         AddDismissDialogMechanic();
         AddGameTagsMechanic();
     });
+    
 
     function goBack(event)
     {
@@ -130,7 +168,7 @@
                 </label>
                 <div id="element-tags" class="flex flex-wrap w-ful mb-2">
                 </div>
-                <input type="text" placeholder="Write some tag name here" id="game-editor" class="editor w-3/5 md:w-1/2 rounded-3xl pr-0 pl-3 md:pl-3 italic">
+                <input type="text" tabindex="3" placeholder="Write some tag name here" id="game-editor" class="editor w-3/5 md:w-1/2 rounded-3xl pr-0 pl-3 md:pl-3 italic">
             </div>
         </div>
     </fieldset>    
@@ -150,10 +188,10 @@
         
         </div>
         <div class="mb-6">
-            <button on:click={GoBack}>
+            <button id="goBack_btn" on:click={GoBack} tabindex="5">
                 Go Back
-            </button>
-            <button id="save_changes_btn" on:click={handleSavingPostChanges}>
+            </button>            
+            <button id="save_changes_btn" on:click={handleSavingPostChanges} tabindex="6">
                 Save Changes
             </button>
         </div>
