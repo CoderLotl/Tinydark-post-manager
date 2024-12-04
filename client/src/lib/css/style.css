@@ -116,6 +116,12 @@
 .ql-size-huge {
   font-size: 24px;
 }
+
+.ql-editor p:focus {
+  outline: none; /* Remove the outline */
+  border: none;  /* Remove any border if it exists */
+}
+
 .hidden
 {
   display: none;
