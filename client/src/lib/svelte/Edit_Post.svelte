@@ -40,6 +40,7 @@
             {
                 toolbar: '#toolbar',
             }
+            
         });
         quill2 = new Quill('#title-editor');        
         quill3 = new Quill('#url-editor');
@@ -192,6 +193,13 @@
         </legend>
         <fieldset class="flex justify-center w-full border border-solid my-6">
             <div id="toolbar" class="my-2 flex">
+                <select class="ql-size bg-darkGrey">
+                    <option value="small">Small</option>
+                    <!-- Note a missing, thus falsy value, is used to reset to default -->
+                    <option value="" selected>Default</option>
+                    <option value="large">Large</option>
+                    <option value="huge">Huge</option>
+                  </select>
                 <button class="ql-bold td-button font-bold">
                     <img src={bold} width="16" height="16">
                 </button>
@@ -210,7 +218,7 @@
                 <span class="flex items-center h-[30px] ml-1 bg-gradient-to-b from-activeOrange to-activeOrangeHover px-2">
                     <img src={color} class="w-[16px] h-[16px] mr-2">
                     <select class="ql-color bg-darkGrey w-[50px]">
-                        <option value="rgb(0, 0, 0)" class="bg-[rgb(0,0,0)]"/>
+                        <option value="rgb(0, 0, 0)" class="bg-[rgb(0,0,0)]" selected/>
                         <option value="rgb(230, 0, 0)" class="bg-[rgb(230,0,0)]"/>
                         <option value="rgb(255, 153, 0)" class="bg-[rgb(255,153,0)]"/>
                         <option value="rgb(255, 255, 0)" class="bg-[rgb(255,255,0)]"/>
@@ -228,7 +236,7 @@
                 </span>
             </div>
         </fieldset>
-        <div id='post-editor' class="h-min-full w-full p-6 my-6 editor">
+        <div id='post-editor' class="h-min-full w-full p-6 my-6 bg-darkGrey">
         
         </div>
         <div class="mb-6">
