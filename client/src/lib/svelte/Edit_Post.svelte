@@ -190,8 +190,8 @@
         <legend class="text-base px-2 border-black border-2 bg-lightGrey">
             Post content
         </legend>
-        <fieldset id="toolbar" class="flex justify-center w-full border border-solid my-6">
-            <div id="toolbar" class="my-2">
+        <fieldset class="flex justify-center w-full border border-solid my-6">
+            <div id="toolbar" class="my-2 flex">
                 <button class="ql-bold td-button font-bold">
                     <img src={bold} width="16" height="16">
                 </button>
@@ -207,9 +207,25 @@
                 <button class="ql-strike td-button">
                     <img src={strikethrough} width="16" height="16">
                 </button>
-                <select class="ql-color td-button">
-                    <img src={color} width="16" height="16">
-                </select>
+                <span class="flex items-center h-[30px] ml-1 bg-gradient-to-b from-activeOrange to-activeOrangeHover px-2">
+                    <img src={color} class="w-[16px] h-[16px] mr-2">
+                    <select class="ql-color bg-darkGrey w-[50px]">
+                        <option value="rgb(0, 0, 0)" class="bg-[rgb(0,0,0)]"/>
+                        <option value="rgb(230, 0, 0)" class="bg-[rgb(230,0,0)]"/>
+                        <option value="rgb(255, 153, 0)" class="bg-[rgb(255,153,0)]"/>
+                        <option value="rgb(255, 255, 0)" class="bg-[rgb(255,255,0)]"/>
+                        <option value="rgb(0, 138, 0)" class="bg-[rgb(255,138,0)]"/>
+                        <option value="rgb(0, 102, 204)" class="bg-[rgb(0,102,204)]"/>
+                        <option value="rgb(153, 51, 255)" class="bg-[rgb(153,51,255)]"/>
+                        <option value="rgb(255, 255, 255)" class="bg-[rgb(255,255,255)]"/>
+                        <option value="rgb(250, 204, 204)" class="bg-[rgb(250,204,204)]"/>
+                        <option value="rgb(255, 235, 204)" class="bg-[rgb(255,235,204)]"/>
+                        <option value="rgb(204, 224, 245)" class="bg-[rgb(204,224,245)]"/>
+                        <option value="rgb(235, 214, 255)" class="bg-[rgb(235,214,255)]"/>
+                        <option value="rgb(187, 187, 187)" class="bg-[rgb(187,187,187)]"/>
+                        <option value="rgb(102, 185, 102)" class="bg-[rgb(102,185,102)]"/>
+                    </select>
+                </span>
             </div>
         </fieldset>
         <div id='post-editor' class="h-min-full w-full p-6 my-6 editor">
